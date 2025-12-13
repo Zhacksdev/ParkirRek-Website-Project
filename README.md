@@ -123,4 +123,4 @@ Jika Anda ingin berkontribusi pada pengembangan fitur:
 [cite_start]Proyek ini bersifat **Internal** untuk lingkungan Telkom University dan tidak memiliki lisensi publik[cite: 223].
 
 ---
-*Dikembangkan oleh Tim Pengembang Parkirek Telkom University Surabaya.*
+*Dikembangkan oleh Tim Horeee 07 02.*
