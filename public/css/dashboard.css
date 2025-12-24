@@ -1,0 +1,225 @@
+/* Dashboard Variables */
+:root {
+    --maroon: #7b1e2b;
+    --light-maroon: #fdf4f5;
+    --dark-maroon: #641722;
+    --card-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Body Padding for Fixed Navbar */
+body {
+    padding-top: 76px;
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+/* Navbar Styles */
+.navbar {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    padding: 1rem 0;
+}
+
+.text-maroon {
+    color: var(--maroon) !important;
+}
+
+.logo-circle {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background: var(--maroon);
+    color: white;
+    text-align: center;
+    line-height: 32px;
+    border-radius: 8px;
+    margin-right: 6px;
+}
+
+.btn-maroon {
+    background: var(--maroon);
+    color: white;
+    border-radius: 10px;
+    border: none;
+}
+
+.btn-maroon:hover {
+    background: var(--dark-maroon);
+    color: white;
+}
+
+.btn-outline-maroon {
+    border: 1px solid var(--maroon);
+    color: var(--maroon);
+    border-radius: 10px;
+}
+
+.btn-outline-maroon:hover {
+    background: var(--maroon);
+    color: white;
+}
+
+/* User Avatar */
+.avatar-circle {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, var(--maroon), var(--dark-maroon));
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* Dashboard Content */
+.dashboard-wrapper {
+    min-height: calc(100vh - 76px);
+}
+
+/* Stats Cards */
+.stat-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.2s;
+    border-left: 4px solid var(--maroon);
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--light-maroon);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--maroon);
+    font-size: 1.2rem;
+}
+
+/* Activity Items */
+.activity-item {
+    transition: background-color 0.2s;
+}
+
+.activity-item:hover {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+}
+
+.activity-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    background: #e8f4ff;
+    color: #007bff;
+}
+
+.activity-icon.booking {
+    background: #e7f9ed;
+    color: #28a745;
+}
+
+.activity-icon.vehicle {
+    background: #fff3cd;
+    color: #ffc107;
+}
+
+/* Violations */
+.violation-count {
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--maroon);
+    line-height: 1;
+}
+
+.violation-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--light-maroon);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--maroon);
+}
+
+/* Add Vehicle Card */
+.add-vehicle-card {
+    background: linear-gradient(135deg, var(--light-maroon), #fff5f7);
+    border: 2px dashed var(--maroon) !important;
+}
+
+.add-icon {
+    width: 48px;
+    height: 48px;
+    background: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--maroon);
+    font-size: 1.5rem;
+    border: 1px solid var(--light-maroon);
+}
+
+/* Nav Pills Custom */
+.nav-pills .nav-link {
+    border-radius: 8px;
+    color: #666;
+    padding: 0.75rem;
+    border: 1px solid #dee2e6;
+}
+
+.nav-pills .nav-link.active {
+    background: var(--maroon);
+    color: white;
+    border-color: var(--maroon);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    body {
+        padding-top: 70px;
+    }
+    
+    .navbar-collapse {
+        margin-top: 1rem;
+    }
+    
+    .stat-card {
+        margin-bottom: 1rem;
+    }
+    
+    .violation-count {
+        font-size: 3rem;
+    }
+}
+/* NAVBAR ACTIVE STATE */
+.nav-link.active {
+    background-color: var(--maroon) !important;
+    color: white !important;
+    border-radius: 8px;
+}
+
+/* Agar tidak full width */
+.container-fluid.px-4 {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Container untuk content */
+.col-xxl-10 {
+    max-width: 1400px;
+}
