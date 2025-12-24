@@ -16,7 +16,6 @@
 
     </div>
     <br>
-    <h4 class="fw-bold mb-3">Booking History</h4>
 
     <!-- Booking Card -->
     <div class="booking-card mb-3">

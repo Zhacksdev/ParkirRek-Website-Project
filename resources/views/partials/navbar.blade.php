@@ -25,7 +25,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->is('violations*') ? 'active' : '' }}" href="#">
+                    <a class="nav-link {{ request()->is('violations*') ? 'active' : '' }}" href="/violations">
                         <i class="bi bi-exclamation-triangle me-1"></i> Violations
                     </a>
                 </li>

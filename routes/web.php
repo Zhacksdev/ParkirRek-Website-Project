@@ -21,3 +21,6 @@ Route::get('/booking', function () {
 Route::get('/vehicles', function () {
     return view('vehicles.show');
 });
+Route::get('/violations', function () {
+    return view('violations.index');
+});

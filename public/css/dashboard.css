@@ -311,11 +311,11 @@ body {
 .status-canceled {
     font-size: 0.9rem;
     font-weight: 600;
-    color: #dc3545; /* Bootstrap danger red */
+    color: #dc3545; /* Bootstrap danger red x*/
     white-space: nowrap;
 }
 
-/* ============ MY VEHICLES PAGE ============ */
+/* MY VEHICLES PAGE */
 .vehicles-page {
     max-width: 1400px;
     margin: 0 auto;
@@ -450,4 +450,30 @@ body {
     .vehicle-actions {
         justify-content: flex-start;
     }
+}
+
+/* VIOLATIONS PAGE */
+.violation-card{
+    background: #fff;
+    border-radius: 16px;
+    padding: 1.75rem 2rem;
+    box-shadow: var(--card-shadow);
+    border-left: 6px solid var(--maroon) !important;
+    border-top: 1px solid #e9ecef;
+    border-right: 1px solid #e9ecef;
+    border-bottom: 1px solid #e9ecef;
+
+    transition: all 0.3s ease;
+}
+
+.violation-card:hover{
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.10);
+}
+
+.violation-points{
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #dc3545;
+    white-space: nowrap;
 }

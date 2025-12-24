@@ -47,7 +47,7 @@
                         </div>
                         <h6 class="mb-0 fw-semibold">Violations</h6>
                     </div>
-                    <h2 class="fw-bold mb-0">12</h2>
+                    <h2 class="fw-bold mb-0">4</h2>
                 </div>
             </div>
         </div>
