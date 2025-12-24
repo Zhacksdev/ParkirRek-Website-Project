@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('content')
-<div class="container-fluid mt-5 pt-4">
+<div class="container-fluid pt-3">
     <!-- Header -->
     <div class="mb-4">
         <h1 class="fw-bold">Welcome back, Student!</h1>

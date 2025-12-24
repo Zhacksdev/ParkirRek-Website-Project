@@ -13,3 +13,11 @@ Route::get('/login', function () {
 Route::get('/dashboard', function () {
     return view('dashboard.user');
 });
+
+Route::get('/booking', function () {
+    return view('parking.booking');
+});
+
+Route::get('/vehicles', function () {
+    return view('vehicles.show');
+});

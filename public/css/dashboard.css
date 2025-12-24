@@ -223,3 +223,231 @@ body {
 .col-xxl-10 {
     max-width: 1400px;
 }
+
+/* Booking Parkir Page Styles */
+.booking-card {
+    transition: all 0.3s ease;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+}
+
+.booking-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    border-color: var(--maroon);
+}
+
+.info-icon {
+    width: 32px;
+    height: 32px;
+    background: var(--light-maroon);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--maroon);
+    font-size: 1rem;
+}
+
+.upcoming-item {
+    transition: all 0.2s ease;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+}
+
+.upcoming-item:hover {
+    border-color: var(--maroon);
+    background-color: var(--light-maroon);
+}
+
+.upcoming-date {
+    min-width: 60px;
+    background: var(--light-maroon);
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid rgba(123, 30, 43, 0.1);
+}
+
+/* Booking Page */
+.booking-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.75rem 2rem;
+    box-shadow: var(--card-shadow);
+    border-left: 6px solid var(--maroon);
+}
+
+.booking-status {
+    color: #16a34a;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.nav-link {
+    transition: all 0.2s ease;
+}
+.booking-status {
+    min-width: 130px;
+    text-align: right;
+}
+
+.status-completed {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #28a745;
+    white-space: nowrap;
+}
+
+.booking-card h6 {
+    font-size: 0.85rem;
+}
+
+.booking-card strong {
+    font-size: 0.95rem;
+}
+
+.status-canceled {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #dc3545; /* Bootstrap danger red */
+    white-space: nowrap;
+}
+
+/* ============ MY VEHICLES PAGE ============ */
+.vehicles-page {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.btn-add-vehicle-top {
+    padding: 0.65rem 1rem;
+}
+
+.vehicle-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.vehicle-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 1.75rem 2rem;
+
+    box-shadow: var(--card-shadow);
+    border-left: 6px solid var(--maroon);
+
+    display: grid;
+    grid-template-columns: 1.4fr 0.8fr 0.8fr 0.45fr;
+    align-items: center;
+    gap: 14px;
+}
+
+
+.vehicle-name {
+    font-weight: 700;
+    letter-spacing: -0.01px;
+}
+
+.vehicle-plate {
+    color: var(--maroon);
+    font-weight: 700;
+    letter-spacing: 0.06px;
+}
+
+.vehicle-meta {
+    font-size: 0.9rem;
+}
+
+.vehicle-status {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+}
+
+.vehicle-status-label {
+    font-size: 0.78rem;
+    color: #6c757d;
+}
+
+.badge-soft {
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    font-weight: 700;
+    border: 1px solid transparent;
+}
+
+.badge-verified {
+    background: #e8f7ef;
+    color: #1f7a4d;
+    border-color: #c9efd9;
+}
+
+.badge-pending {
+    background: #fff4df;
+    color: #b06a00;
+    border-color: #ffe3b3;
+}
+
+.badge-parked {
+    background: #e9efff;
+    color: #2f58d6;
+    border-color: #cedbff;
+}
+
+.badge-notparked {
+    background: #ffe9ea;
+    color: #b4232b;
+    border-color: #ffd0d3;
+}
+
+.vehicle-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.icon-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid #e9ecef;
+    background: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+}
+
+.icon-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(0,0,0,.08);
+}
+
+.icon-btn.danger {
+    color: #dc3545;
+}
+
+.icon-btn.danger:hover {
+    border-color: #ffd0d3;
+    background: #fff7f7;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .vehicle-card {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .vehicle-status {
+        align-items: flex-start;
+    }
+
+    .vehicle-actions {
+        justify-content: flex-start;
+    }
+}
