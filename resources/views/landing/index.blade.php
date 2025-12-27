@@ -40,8 +40,8 @@
         </p>
 
         <div class="d-flex justify-content-center gap-3 mt-4">
-            <a href="#" class="btn btn-maroon px-4">Student Login</a>
-            <a href="#" class="btn btn-outline-maroon px-4">Security Portal</a>
+            <a href="/login" class="btn btn-maroon px-4">Student Login</a>
+            <a href="/security" class="btn btn-outline-maroon px-4">Security Portal</a>
         </div>
     </div>
 </section>
