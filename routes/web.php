@@ -10,6 +10,19 @@ Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
 
+Route::get('/forgot-password', function () {
+    return view('auth.forgot-password');
+});
+
+Route::get('/verify-code', function () {
+    return view('auth.verify-code');
+});
+
+Route::get('/register', function () {
+    return view('auth.register');
+});
+
+
 Route::get('/dashboard', function () {
     return view('dashboard.user');
 });
