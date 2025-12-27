@@ -70,7 +70,7 @@
             </div>
 
             <!-- Create Account -->
-            <a href="/dashboard" class="btn auth-btn-primary w-100 mb-3">
+            <a href="/login" class="btn auth-btn-primary w-100 mb-3">
                 Create Account
             </a>
 

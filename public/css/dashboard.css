@@ -632,3 +632,174 @@ body {
     padding: 10px 12px;
     font-size: .8rem;
 }
+
+/* ===== Delete Modal Theme ===== */
+.delete-modal{
+    border-radius: 16px;
+    box-shadow: var(--card-shadow);
+}
+
+.delete-preview{
+    background: #fff5f6;
+    border: 1px solid rgba(123,30,43,.18);
+    border-radius: 12px;
+    padding: 12px 14px;
+}
+
+/* ===== TIMESTAMP PAGE ===== */
+.timestamp-filter{
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 16px;
+    padding: 16px 16px;
+    box-shadow: var(--card-shadow);
+}
+
+.filter-input{
+    border-radius: 12px;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    padding: 10px 12px;
+}
+
+.filter-input:focus{
+    background: #fff;
+    border-color: rgba(123,30,43,.25);
+    box-shadow: 0 0 0 .25rem rgba(123,30,43,.10);
+}
+
+.ts-mini{
+    background: #fff;
+    border-radius: 16px;
+    padding: 16px 16px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid #e9ecef;
+    border-left: 6px solid var(--maroon);
+}
+
+.ts-mini-icon{
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: var(--light-maroon);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--maroon);
+    font-size: 1.2rem;
+    border: 1px solid rgba(123,30,43,.12);
+}
+.ts-mini-icon.soft-blue{
+    background: #e9efff;
+    color: #2f58d6;
+    border-color: #cedbff;
+}
+.ts-mini-icon.soft-green{
+    background: #e8f7ef;
+    color: #1f7a4d;
+    border-color: #c9efd9;
+}
+
+.ts-card{
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px 20px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid #e9ecef;
+    border-left: 6px solid var(--maroon);
+}
+
+.ts-day{
+    margin-top: 14px;
+}
+
+.ts-day-title{
+    font-size: 0.85rem;
+    margin: 12px 2px 10px;
+    color: #111827;
+    font-weight: 700;
+}
+
+.ts-item{
+    background: #eef0f2;
+    border: 1px solid #e2e4e7;
+    border-radius: 16px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.ts-time{
+    min-width: 92px;
+    padding: 8px 14px;
+    background: #fff;
+    border: 1px solid #cfd3d8;
+    border-radius: 999px;
+    font-weight: 800;
+    text-align: center;
+}
+
+.ts-body{
+    flex: 1;
+}
+
+.ts-title{
+    font-weight: 800;
+    color: #111827;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ts-meta{
+    font-size: 0.9rem;
+    color: #6b7280;
+    margin-top: 2px;
+}
+
+.ts-dot{
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+}
+.dot-blue{ background:#2563eb; }
+.dot-green{ background:#16a34a; }
+.dot-red{ background:#dc2626; }
+.dot-orange{ background:#f59e0b; }
+
+.ts-badge{
+    padding: 0.35rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    border: 1px solid transparent;
+}
+
+.badge-in{
+    background: #e9efff;
+    color: #2f58d6;
+    border-color: #cedbff;
+}
+.badge-out{
+    background: #e8f7ef;
+    color: #1f7a4d;
+    border-color: #c9efd9;
+}
+.badge-violation{
+    background: #ffe9ea;
+    color: #b4232b;
+    border-color: #ffd0d3;
+}
+.badge-process{
+    background: #fff4df;
+    color: #b06a00;
+    border-color: #ffe3b3;
+}
+.badge-verified{
+    background: #e8f7ef;
+    color: #1f7a4d;
+    border-color: #c9efd9;
+}

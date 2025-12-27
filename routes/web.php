@@ -27,10 +27,6 @@ Route::get('/dashboard', function () {
     return view('dashboard.user');
 });
 
-Route::get('/booking', function () {
-    return view('parking.booking');
-});
-
 Route::get('/vehicles', function () {
     return view('vehicles.show');
 });
@@ -44,4 +40,8 @@ Route::get('/vehicles/create', function () {
 
 Route::get('/vehicles/edit', function () {
     return view('vehicles.edit');
+});
+
+Route::get('/timestamp', function () {
+    return view('timestamp.index');
 });

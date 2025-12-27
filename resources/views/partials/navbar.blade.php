@@ -13,12 +13,6 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->is('booking*') ? 'active' : '' }}" href="/booking">
-                        <i class="bi bi-calendar-check me-1"></i> Bookings
-                    </a>
-                </li>
-
-                <li class="nav-item">
                     <a class="nav-link {{ request()->is('vehicles*') ? 'active' : '' }}" href="/vehicles">
                         <i class="bi bi-car-front me-1"></i> My Vehicles
                     </a>

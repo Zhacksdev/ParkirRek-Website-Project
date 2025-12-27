@@ -1,30 +1,17 @@
 @extends('layouts.dashboard')
 
 @section('content')
-<div class="container-fluid pt-3">
+<div class="container-fluid px-5 pt-3">
+
     <!-- Header -->
-    <div class="mb-4">
+    <div class="mb-3">
         <h1 class="fw-bold">Welcome back, Student!</h1>
-        <p class="text-muted fs-5">Ready to go through your day?</p>
+        <p class="text-muted fs-5 mb-0">Ready to go through your day?</p>
     </div>
 
-    <!-- Stats Cards -->
-    <div class="row mb-4">
-        <div class="col-md-3 mb-3">
-            <div class="card stat-card h-100">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="stat-icon me-3">
-                            <i class="bi bi-calendar-check"></i>
-                        </div>
-                        <h6 class="mb-0 fw-semibold">Active Bookings</h6>
-                    </div>
-                    <h2 class="fw-bold mb-0">2</h2>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3 mb-3">
+    <!-- Stats Cards (3 cards = 3 kolom, ga renggang) -->
+    <div class="row g-3 mb-3">
+        <div class="col-12 col-md-6 col-xl-4">
             <div class="card stat-card h-100">
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-3">
@@ -38,7 +25,7 @@
             </div>
         </div>
 
-        <div class="col-md-3 mb-3">
+        <div class="col-12 col-md-6 col-xl-4">
             <div class="card stat-card h-100">
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-3">
@@ -52,7 +39,7 @@
             </div>
         </div>
 
-        <div class="col-md-3 mb-3">
+        <div class="col-12 col-md-6 col-xl-4">
             <div class="card stat-card h-100">
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-3">
@@ -67,11 +54,10 @@
         </div>
     </div>
 
-    <!-- Bottom Section (Timestamp + Add Vehicle + Logbook) -->
-    <div class="row mt-3">
-        <!-- Left Cards -->
-        <div class="col-lg-6 mb-4">
-            <div class="dash-mini-card timestamp-card">
+    <!-- Bottom Section (Timestamp + Add Vehicle) -->
+    <div class="row g-3 mt-1 mb-2">
+        <div class="col-12 col-lg-6">
+            <div class="dash-mini-card timestamp-card h-100">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
                         <h6 class="fw-bold mb-1">Timestamp</h6>
@@ -81,15 +67,15 @@
                 </div>
 
                 <div class="mt-4">
-                    <a href="#" class="btn btn-maroon w-100 btn-mini">
+                    <a href="/timestamp" class="btn btn-maroon w-100 btn-mini">
                         See Details <i class="bi bi-chevron-right ms-1"></i>
                     </a>
                 </div>
             </div>
         </div>
 
-        <div class="col-lg-6 mb-4">
-            <div class="dash-mini-card addvehicle-card">
+        <div class="col-12 col-lg-6">
+            <div class="dash-mini-card addvehicle-card h-100">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
                         <h6 class="fw-bold mb-1">Add Vehicle</h6>
@@ -99,9 +85,9 @@
                 </div>
 
                 <div class="mt-4">
-                    <button class="btn btn-outline-maroon w-100 btn-mini" type="button">
+                    <a href="/vehicles/create" class="btn btn-outline-maroon w-100 btn-mini">
                         <i class="bi bi-plus-circle me-1"></i> Add Vehicle
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -192,7 +178,6 @@
             </div>
         </div>
     </div>
-
 
 </div>
 @endsection
