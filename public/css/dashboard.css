@@ -564,3 +564,71 @@ body {
 .dot-green{ background:#16a34a; }
 .dot-red{ background:#dc2626; }
 .dot-orange{ background:#f59e0b; }
+
+/* ===== Add Vehicle Form ===== */
+.vehicle-form-card{
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 16px;
+    padding: 22px 22px;
+    box-shadow: var(--card-shadow);
+}
+
+.form-soft{
+    border-radius: 10px;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    padding: 10px 12px;
+}
+
+.form-soft:focus{
+    background: #fff;
+    border-color: rgba(123,30,43,.25);
+    box-shadow: 0 0 0 .25rem rgba(123,30,43,.10);
+}
+
+.upload-box{
+    width: 100%;
+    border: 1.5px dashed #d1d5db;
+    border-radius: 12px;
+    padding: 18px;
+    display: block;
+    cursor: pointer;
+    background: #fff;
+    transition: all .15s ease;
+}
+
+.upload-box:hover{
+    border-color: rgba(123,30,43,.35);
+    background: #fff7f8;
+}
+
+.upload-inner{
+    text-align: center;
+}
+
+.upload-icon{
+    font-size: 1.7rem;
+    color: #6b7280;
+    display: inline-block;
+    margin-bottom: 6px;
+}
+
+.upload-text{
+    font-weight: 600;
+    color: #111827;
+}
+
+.upload-subtext{
+    font-size: .8rem;
+    color: #6b7280;
+}
+
+.note-box{
+    background: #eaf2ff;
+    border: 1px solid #cfe1ff;
+    color: #1e3a8a;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: .8rem;
+}

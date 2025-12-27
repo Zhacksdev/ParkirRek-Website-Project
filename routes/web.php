@@ -37,3 +37,7 @@ Route::get('/vehicles', function () {
 Route::get('/violations', function () {
     return view('violations.index');
 });
+
+Route::get('/vehicles/create', function () {
+    return view('vehicles.create');
+});

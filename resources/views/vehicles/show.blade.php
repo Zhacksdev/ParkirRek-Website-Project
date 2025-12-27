@@ -14,7 +14,7 @@
         </div>
 
 
-        <a href="#" class="btn btn-outline-maroon mt-5">
+        <a href="/vehicles/create" class="btn btn-outline-maroon mt-5">
             <i class="bi bi-plus-circle"></i> Add Vehicle
         </a>
     </div>
