@@ -9,9 +9,9 @@
         <p class="text-muted fs-5 mb-0">Ready to go through your day?</p>
     </div>
 
-    <!-- Stats Cards (3 cards = 3 kolom, ga renggang) -->
+    <!-- Stats Cards (2 cards = 2 kolom, ga ada slot kosong) -->
     <div class="row g-3 mb-3">
-        <div class="col-12 col-md-6 col-xl-4">
+        <div class="col-12 col-md-6">
             <div class="card stat-card h-100">
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-3">
@@ -25,7 +25,7 @@
             </div>
         </div>
 
-        <div class="col-12 col-md-6 col-xl-4">
+        <div class="col-12 col-md-6">
             <div class="card stat-card h-100">
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-3">
@@ -35,20 +35,6 @@
                         <h6 class="mb-0 fw-semibold">Violations</h6>
                     </div>
                     <h2 class="fw-bold mb-0">4</h2>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-12 col-md-6 col-xl-4">
-            <div class="card stat-card h-100">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="stat-icon me-3">
-                            <i class="bi bi-clock-history"></i>
-                        </div>
-                        <h6 class="mb-0 fw-semibold">History</h6>
-                    </div>
-                    <h2 class="fw-bold mb-0">24</h2>
                 </div>
             </div>
         </div>
