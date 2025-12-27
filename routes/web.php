@@ -41,3 +41,7 @@ Route::get('/violations', function () {
 Route::get('/vehicles/create', function () {
     return view('vehicles.create');
 });
+
+Route::get('/vehicles/edit', function () {
+    return view('vehicles.edit');
+});

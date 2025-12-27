@@ -13,7 +13,6 @@
             <p class="text-muted fs-6 mb-0">Manage your registered vehicles</p>
         </div>
 
-
         <a href="/vehicles/create" class="btn btn-outline-maroon mt-5">
             <i class="bi bi-plus-circle"></i> Add Vehicle
         </a>
@@ -22,6 +21,7 @@
     <!-- Vehicles List -->
     <div class="vehicle-list">
 
+        <!-- VEHICLE 1 -->
         <div class="vehicle-card">
             <div class="vehicle-left">
                 <h5 class="vehicle-name mb-1">Toyota Avanza</h5>
@@ -46,15 +46,16 @@
             </div>
 
             <div class="vehicle-actions">
-                <button class="icon-btn" type="button" title="Edit">
+                <a href="/vehicles/edit" class="icon-btn" title="Edit">
                     <i class="bi bi-pencil-square"></i>
-                </button>
+                </a>
                 <button class="icon-btn danger" type="button" title="Delete">
                     <i class="bi bi-trash"></i>
                 </button>
             </div>
         </div>
 
+        <!-- VEHICLE 2 -->
         <div class="vehicle-card">
             <div class="vehicle-left">
                 <h5 class="vehicle-name mb-1">BYD Sealion 7</h5>
@@ -79,15 +80,16 @@
             </div>
 
             <div class="vehicle-actions">
-                <button class="icon-btn" type="button" title="Edit">
+                <a href="/vehicles/edit" class="icon-btn" title="Edit">
                     <i class="bi bi-pencil-square"></i>
-                </button>
+                </a>
                 <button class="icon-btn danger" type="button" title="Delete">
                     <i class="bi bi-trash"></i>
                 </button>
             </div>
         </div>
 
+        <!-- VEHICLE 3 -->
         <div class="vehicle-card">
             <div class="vehicle-left">
                 <h5 class="vehicle-name mb-1">Honda Stylo</h5>
@@ -112,9 +114,9 @@
             </div>
 
             <div class="vehicle-actions">
-                <button class="icon-btn" type="button" title="Edit">
+                <a href="/vehicles/edit" class="icon-btn" title="Edit">
                     <i class="bi bi-pencil-square"></i>
-                </button>
+                </a>
                 <button class="icon-btn danger" type="button" title="Delete">
                     <i class="bi bi-trash"></i>
                 </button>

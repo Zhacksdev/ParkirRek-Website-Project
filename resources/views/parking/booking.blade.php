@@ -11,7 +11,7 @@
         </div>
 
         <a href="#" class="btn btn-outline-maroon mt-5">
-            <i class="bi bi-plus-circle"></i> Add Vehicle
+            <i class="bi bi-plus-circle"></i> Add Booking
         </a>
 
     </div>
