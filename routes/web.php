@@ -46,6 +46,3 @@ Route::get('/timestamp', function () {
     return view('timestamp.index');
 });
 
-Route::get('/security', function () {
-    return view('dashboard.security');
-});
