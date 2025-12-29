@@ -45,4 +45,3 @@ Route::get('/vehicles/edit', function () {
 Route::get('/timestamp', function () {
     return view('timestamp.index');
 });
-

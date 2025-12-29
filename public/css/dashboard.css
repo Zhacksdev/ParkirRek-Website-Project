@@ -804,3 +804,61 @@ body {
     border-color: #c9efd9;
 }
 
+
+/* ===== Vehicles List Card ===== */
+.vehicle-card{
+    background:#fff;
+    border-radius:16px;
+    padding: 1.75rem 2rem;
+    box-shadow: var(--card-shadow);
+    border-left: 6px solid var(--maroon);
+
+    display: grid;
+    grid-template-columns: 1.6fr 0.9fr 0.45fr;
+    align-items: center;
+    gap: 14px;
+}
+
+/* ===== Vehicle QR Detail (Right Panel) ===== */
+.vehicle-qr-card{
+    background:#fff;
+    border-radius:16px;
+    padding: 1.5rem 1.5rem;
+    box-shadow: var(--card-shadow);
+    border-left: 6px solid var(--maroon);
+}
+
+.qr-box{
+    border: 1px solid #e9ecef;
+    border-radius: 16px;
+    padding: 18px;
+}
+
+/* QR icon wrapper (clean) */
+.qr-icon-wrapper{
+    width: 160px;
+    height: 160px;
+    margin: 0 auto;
+    border-radius: 24px;
+    background: #fff;
+    border: 2px solid rgba(123,30,43,.25);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.qr-icon-wrapper i{
+    font-size: 110px; /* biar ikon QR-nya beneran gede */
+    line-height: 1;
+    color: #7b1e2b;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .vehicle-card{
+        grid-template-columns: 1fr;
+    }
+    .vehicle-actions{
+        justify-content: flex-start;
+    }
+}

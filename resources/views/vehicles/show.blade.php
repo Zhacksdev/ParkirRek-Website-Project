@@ -19,141 +19,141 @@
     </div>
 
     <!-- Vehicles List -->
-    <div class="vehicle-list">
+    <!-- Vehicles Section: List (Left) + QR Detail (Right) -->
+    <div class="row g-4">
 
-        <!-- VEHICLE 1 -->
-        <div class="vehicle-card">
-            <div class="vehicle-left">
-                <h5 class="vehicle-name mb-1">Toyota Avanza</h5>
-                <div class="vehicle-plate mb-2">B 1234 XYZ</div>
-                <div class="vehicle-meta text-muted">
-                    <i class="bi bi-car-front me-1"></i> Car
+        <!-- LEFT: Vehicles List -->
+        <div class="col-12 col-lg-7">
+            <div class="vehicle-list">
+
+                <div class="vehicle-card">
+                    <div class="vehicle-left">
+                        <h5 class="vehicle-name mb-1">Toyota Avanza</h5>
+                        <div class="vehicle-plate mb-2">B 1234 XYZ</div>
+                        <div class="vehicle-meta text-muted">
+                            <i class="bi bi-car-front me-1"></i> Car
+                        </div>
+                    </div>
+
+                    <div class="vehicle-mid">
+                        <small class="text-muted">STNK Status</small>
+                        <div class="mt-2">
+                            <span class="badge badge-soft badge-verified">Verified</span>
+                        </div>
+                    </div>
+
+                    <div class="vehicle-actions">
+                        <a href="/vehicles/edit" class="icon-btn" title="Edit">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <button class="icon-btn danger" type="button" title="Delete">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
                 </div>
-            </div>
 
-            <div class="vehicle-mid">
-                <small class="text-muted">STNK Status</small>
-                <div class="mt-2">
-                    <span class="badge badge-soft badge-verified">Verified</span>
+                <div class="vehicle-card">
+                    <div class="vehicle-left">
+                        <h5 class="vehicle-name mb-1">BYD Sealion 7</h5>
+                        <div class="vehicle-plate mb-2">L 4321 ZYX</div>
+                        <div class="vehicle-meta text-muted">
+                            <i class="bi bi-car-front me-1"></i> Car
+                        </div>
+                    </div>
+
+                    <div class="vehicle-mid">
+                        <small class="text-muted">STNK Status</small>
+                        <div class="mt-2">
+                            <span class="badge badge-soft badge-pending">Pending</span>
+                        </div>
+                    </div>
+
+                    <div class="vehicle-actions">
+                        <a href="/vehicles/edit" class="icon-btn" title="Edit">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <button class="icon-btn danger" type="button" title="Delete">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
                 </div>
-            </div>
 
-            <div class="vehicle-mid">
-                <small class="text-muted">Parking Status</small>
-                <div class="mt-2">
-                    <span class="badge badge-soft badge-parked">Parked</span>
+                <div class="vehicle-card">
+                    <div class="vehicle-left">
+                        <h5 class="vehicle-name mb-1">Honda Stylo</h5>
+                        <div class="vehicle-plate mb-2">L 1254 DF</div>
+                        <div class="vehicle-meta text-muted">
+                            <i class="bi bi-bicycle me-1"></i> Motorcycle
+                        </div>
+                    </div>
+
+                    <div class="vehicle-mid">
+                        <small class="text-muted">STNK Status</small>
+                        <div class="mt-2">
+                            <span class="badge badge-soft badge-verified">Verified</span>
+                        </div>
+                    </div>
+
+                    <div class="vehicle-actions">
+                        <a href="/vehicles/edit" class="icon-btn" title="Edit">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <button class="icon-btn danger" type="button" title="Delete">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
                 </div>
-            </div>
 
-            <div class="vehicle-actions">
-                <a href="/vehicles/edit" class="icon-btn" title="Edit">
-                    <i class="bi bi-pencil-square"></i>
-                </a>
-
-                <!-- Delete Trigger -->
-                <button
-                    class="icon-btn danger"
-                    type="button"
-                    title="Delete"
-                    data-bs-toggle="modal"
-                    data-bs-target="#deleteVehicleModal"
-                    data-vehicle-name="Toyota Avanza"
-                    data-vehicle-plate="B 1234 XYZ"
-                >
-                    <i class="bi bi-trash"></i>
-                </button>
             </div>
         </div>
 
-        <!-- VEHICLE 2 -->
-        <div class="vehicle-card">
-            <div class="vehicle-left">
-                <h5 class="vehicle-name mb-1">BYD Sealion 7</h5>
-                <div class="vehicle-plate mb-2">L 4321 ZYX</div>
-                <div class="vehicle-meta text-muted">
-                    <i class="bi bi-car-front me-1"></i> Car
+        <!-- RIGHT: Vehicle QR Detail -->
+        <div class="col-12 col-lg-5">
+            <div class="vehicle-qr-card">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-1">Vehicle QR</h5>
+                        <p class="text-muted mb-0 small">Show this QR to security for parking In/Out</p>
+                    </div>
+                    <i class="bi bi-qr-code text-maroon fs-4"></i>
                 </div>
-            </div>
 
-            <div class="vehicle-mid">
-                <small class="text-muted">STNK Status</small>
-                <div class="mt-2">
-                    <span class="badge badge-soft badge-pending">Pending</span>
+                <div class="qr-box mb-3 text-center">
+                    <div class="qr-icon-wrapper">
+                        <i class="bi bi-qr-code"></i>
+                    </div>
+
+                    <div class="mt-3">
+                        <div class="fw-bold text-maroon">B 1234 XYZ</div>
+                        <div class="text-muted small">Toyota Avanza • Car</div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="vehicle-mid">
-                <small class="text-muted">Parking Status</small>
-                <div class="mt-2">
-                    <span class="badge badge-soft badge-notparked">Not Parked</span>
+                <div class="p-3 rounded-3" style="background:#fdf4f5; border:1px solid rgba(123,30,43,.15);">
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted small">STNK</span>
+                        <span class="fw-semibold">Verified</span>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <span class="text-muted small">Note</span>
+                        <span class="fw-semibold">Present QR at gate</span>
+                    </div>
                 </div>
-            </div>
 
-            <div class="vehicle-actions">
-                <a href="/vehicles/edit" class="icon-btn" title="Edit">
-                    <i class="bi bi-pencil-square"></i>
-                </a>
-
-                <!-- Delete Trigger -->
-                <button
-                    class="icon-btn danger"
-                    type="button"
-                    title="Delete"
-                    data-bs-toggle="modal"
-                    data-bs-target="#deleteVehicleModal"
-                    data-vehicle-name="BYD Sealion 7"
-                    data-vehicle-plate="L 4321 ZYX"
-                >
-                    <i class="bi bi-trash"></i>
-                </button>
-            </div>
-        </div>
-
-        <!-- VEHICLE 3 -->
-        <div class="vehicle-card">
-            <div class="vehicle-left">
-                <h5 class="vehicle-name mb-1">Honda Stylo</h5>
-                <div class="vehicle-plate mb-2">L 1254 DF</div>
-                <div class="vehicle-meta text-muted">
-                    <i class="bi bi-bicycle me-1"></i> Motorcycle
+                <div class="mt-3 d-flex gap-2">
+                    <button type="button" class="btn btn-maroon flex-fill">
+                        <i class="bi bi-share me-1"></i> Share
+                    </button>
+                    <button type="button" class="btn btn-outline-maroon flex-fill">
+                        <i class="bi bi-download me-1"></i> Save
+                    </button>
                 </div>
-            </div>
-
-            <div class="vehicle-mid">
-                <small class="text-muted">STNK Status</small>
-                <div class="mt-2">
-                    <span class="badge badge-soft badge-verified">Verified</span>
-                </div>
-            </div>
-
-            <div class="vehicle-mid">
-                <small class="text-muted">Parking Status</small>
-                <div class="mt-2">
-                    <span class="badge badge-soft badge-notparked">Not Parked</span>
-                </div>
-            </div>
-
-            <div class="vehicle-actions">
-                <a href="/vehicles/edit" class="icon-btn" title="Edit">
-                    <i class="bi bi-pencil-square"></i>
-                </a>
-
-                <!-- Delete Trigger -->
-                <button
-                    class="icon-btn danger"
-                    type="button"
-                    title="Delete"
-                    data-bs-toggle="modal"
-                    data-bs-target="#deleteVehicleModal"
-                    data-vehicle-name="Honda Stylo"
-                    data-vehicle-plate="L 1254 DF"
-                >
-                    <i class="bi bi-trash"></i>
-                </button>
             </div>
         </div>
 
     </div>
+
+
 </div>
 
 <!-- Delete Modal -->
@@ -199,18 +199,18 @@
 
 <!-- Script: fill modal content -->
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const modalEl = document.getElementById('deleteVehicleModal');
-    if (!modalEl) return;
+    document.addEventListener('DOMContentLoaded', function() {
+        const modalEl = document.getElementById('deleteVehicleModal');
+        if (!modalEl) return;
 
-    modalEl.addEventListener('show.bs.modal', function (event) {
-        const btn = event.relatedTarget;
-        const name = btn.getAttribute('data-vehicle-name') || 'Vehicle';
-        const plate = btn.getAttribute('data-vehicle-plate') || '-';
+        modalEl.addEventListener('show.bs.modal', function(event) {
+            const btn = event.relatedTarget;
+            const name = btn.getAttribute('data-vehicle-name') || 'Vehicle';
+            const plate = btn.getAttribute('data-vehicle-plate') || '-';
 
-        document.getElementById('delVehicleName').textContent = name;
-        document.getElementById('delVehiclePlate').textContent = plate;
+            document.getElementById('delVehicleName').textContent = name;
+            document.getElementById('delVehiclePlate').textContent = plate;
+        });
     });
-});
 </script>
 @endsection
