@@ -38,8 +38,8 @@ use App\Http\Controllers\InternalApi\Admin\ScanController as AdminScanApiControl
 use App\Http\Controllers\InternalApi\Admin\ScanLogController as AdminScanLogApiController;
 use App\Http\Controllers\InternalApi\Admin\KendaraanLookupController as AdminKendaraanLookupApiController;
 
-use App\Http\Controllers\InternalApi\Mahasiswa\ScanLogController as StudentScanLogApiController;
-use App\Http\Controllers\InternalApi\Mahasiswa\ViolationController as StudentViolationApiController;
+use App\Http\Controllers\InternalApi\Mahasiswa\ScanLogController as MahasiswaScanLogApiController;
+use App\Http\Controllers\InternalApi\Mahasiswa\ViolationController as MahasiswaViolationApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -102,7 +102,7 @@ Route::middleware(['auth', 'role:admin'])
 */
 Route::middleware(['auth', 'role:student'])
     ->prefix('mahasiswa')
-    ->name('student.')
+    ->name('mahasiswa.')
     ->group(function () {
         // Kendaraan CRUD
         Route::resource('kendaraan', MahasiswaKendaraanController::class)
@@ -149,13 +149,12 @@ Route::prefix('internal-api')
         // =========================
         // STUDENT INTERNAL API
         // =========================
-        Route::prefix('student')
+        Route::prefix('mahasiswa')
             ->middleware(['role:student'])
             ->group(function () {
                 // Scan logs (milik sendiri)
-                Route::get('/scan-logs', [StudentScanLogApiController::class, 'index']);
-
+                Route::get('/scan-logs', [MahasiswaScanLogApiController::class, 'index']);
                 // Violations (milik sendiri)
-                Route::get('/violations', [StudentViolationApiController::class, 'index']);
+                Route::get('/violations', [MahasiswaViolationApiController::class, 'index']);
             });
     });

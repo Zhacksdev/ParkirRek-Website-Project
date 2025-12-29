@@ -8,7 +8,7 @@ class FilterViolationRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true; // sudah role:student
+        return true;
     }
 
     public function rules(): array

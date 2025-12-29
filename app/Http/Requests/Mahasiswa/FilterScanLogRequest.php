@@ -8,7 +8,6 @@ class FilterScanLogRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        // akses sudah dibatasi middleware role:student
         return true;
     }
 

@@ -7,10 +7,10 @@ use App\Http\Requests\Mahasiswa\StoreKendaraanRequest;
 use App\Http\Requests\Mahasiswa\UpdateKendaraanRequest;
 use App\Models\Kendaraan;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
-use Illuminate\Support\Facades\Auth; 
 
 class KendaraanController extends Controller
 {
@@ -45,15 +45,13 @@ class KendaraanController extends Controller
             $data['stnk_photo_path'] = $file->storeAs('stnk', $filename, 'public'); // stnk/xxx.jpg
         }
 
-        // Pastikan qr_token ada (kalau belum ada auto di model event)
-        if (empty($data['qr_token'])) {
-            $data['qr_token'] = (string) Str::uuid();
-        }
+        // QR token dibuat oleh sistem (lebih aman), jangan dari input user
+        $data['qr_token'] = (string) Str::uuid();
 
         Kendaraan::create($data);
 
         return redirect()
-            ->route('student.kendaraan.index')
+            ->route('mahasiswa.kendaraan.index')
             ->with('success', 'Kendaraan berhasil ditambahkan.');
     }
 
@@ -87,7 +85,7 @@ class KendaraanController extends Controller
         $kendaraan->update($data);
 
         return redirect()
-            ->route('student.kendaraan.index')
+            ->route('mahasiswa.kendaraan.index')
             ->with('success', 'Kendaraan berhasil diperbarui.');
     }
 
@@ -103,7 +101,7 @@ class KendaraanController extends Controller
         $kendaraan->delete();
 
         return redirect()
-            ->route('student.kendaraan.index')
+            ->route('mahasiswa.kendaraan.index')
             ->with('success', 'Kendaraan berhasil dihapus.');
     }
 
