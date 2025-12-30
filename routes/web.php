@@ -44,4 +44,50 @@ Route::get('/vehicles/edit', function () {
 
 Route::get('/timestamp', function () {
     return view('timestamp.index');
+
+});
+
+    Route::get('/admin/login', function () {
+    return view('admin.auth.login');
+    })->name('admin.login');
+
+    Route::get('/admin/register', function () {
+    return view('admin.auth.register');
+    })->name('admin.register');
+
+    Route::post('/logout', function () {
+    request()->session()->flush();
+    return redirect('/');
+    })->name('logout');
+
+Route::prefix('admin')->name('admin.')->group(function () {
+
+
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('dashboard');
+
+    Route::get('/locations', function () {
+        return view('admin.locations');
+    })->name('locations');
+
+    Route::get('/statistics', function () {
+        return view('admin.statistics');
+    })->name('statistics');
+
+    Route::get('/settings', function () {
+        return view('admin.settings');
+    })->name('settings');
+
+     Route::get('/scan', function () {
+        return view('admin.scan');
+    })->name('scan');
+
+     Route::get('/violations', function () {
+        return view('admin.violations');
+    })->name('violations');
+
+     Route::get('/vehicle-logs', function () {
+        return view('admin.vehicle_logs');
+    })->name('vehicle_logs');
 });

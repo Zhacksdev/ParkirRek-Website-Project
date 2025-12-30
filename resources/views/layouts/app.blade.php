@@ -18,7 +18,11 @@
 
 </head>
 <body>
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> admin-meefol
     @yield('content')
 
 </body>

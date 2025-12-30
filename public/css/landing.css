@@ -30,7 +30,7 @@ body {
     background: var(--maroon);
     color: white;
     border-radius: 10px;
-    
+
 }
 
 .btn-maroon:hover {
@@ -42,7 +42,7 @@ body {
     border: 1px solid var(--maroon);
     color: var(--maroon);
     border-radius: 10px;
-    
+
 }
 
 /* HERO */

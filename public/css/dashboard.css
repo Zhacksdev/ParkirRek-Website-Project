@@ -193,15 +193,15 @@ body {
     body {
         padding-top: 70px;
     }
-    
+
     .navbar-collapse {
         margin-top: 1rem;
     }
-    
+
     .stat-card {
         margin-bottom: 1rem;
     }
-    
+
     .violation-count {
         font-size: 3rem;
     }
