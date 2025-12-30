@@ -3,31 +3,38 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Faker\Factory as Faker;
+use Illuminate\Support\Str;
+use App\Models\Kendaraan;
+use App\Models\User;
 
 class KendaraanSeeder extends Seeder
 {
     public function run(): void
     {
-        $faker = Faker::create('id_ID');
-        DB::table('kendaraans')->delete();
+        // Ambil user mahasiswa
+        $mahasiswa = User::where('role', 'student')->first();
 
-        $users = DB::table('users')->where('role', 'user')->get();
-
-        foreach ($users as $user) {
-            $jumlahKendaraan = rand(1, 2);
-
-            for ($k = 0; $k < $jumlahKendaraan; $k++) {
-                DB::table('kendaraans')->insert([
-                    'mahasiswa_id' => $user->id, // <--- UBAH DARI user_id JADI mahasiswa_id
-                    'jenis_kendaraan' => $faker->randomElement(['Motor', 'Mobil']),
-                    'plat_no' => strtoupper($faker->bothify('? #### ??')),
-                    'jam_masuk' => null,
-                    'jam_keluar' => null,
-                    'created_at' => now(), 'updated_at' => now(),
-                ]);
-            }
+        if (!$mahasiswa) {
+            $this->command->warn('Mahasiswa tidak ditemukan. Seeder Kendaraan dilewati.');
+            return;
         }
+
+        Kendaraan::create([
+            'user_id' => $mahasiswa->id,
+            'jenis_kendaraan' => 'motor',
+            'plat_no' => 'B 1234 ABC',
+            'stnk_number' => 'STNK-001',
+            'stnk_photo_path' => null,
+            'qr_token' => (string) Str::uuid(),
+        ]);
+
+        Kendaraan::create([
+            'user_id' => $mahasiswa->id,
+            'jenis_kendaraan' => 'mobil',
+            'plat_no' => 'B 5678 XYZ',
+            'stnk_number' => 'STNK-002',
+            'stnk_photo_path' => null,
+            'qr_token' => (string) Str::uuid(),
+        ]);
     }
 }

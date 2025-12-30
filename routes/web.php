@@ -2,76 +2,84 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn () => view('landing.index'));
+/*
+|--------------------------------------------------------------------------
+| AUTH (session-based)
+|--------------------------------------------------------------------------
+| Sesuaikan dengan setup login kamu.
+*/
+use App\Http\Controllers\Auth\LoginController;
 
 /*
 |--------------------------------------------------------------------------
-| STUDENT (UI Views)
+| ADMIN (Web)
 |--------------------------------------------------------------------------
-| View path:
-| resources/views/student/...
 */
-Route::prefix('student')->name('student.')->group(function () {
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\ScanController as AdminScanController;
+use App\Http\Controllers\Admin\ScanLogController as AdminScanLogController;
+use App\Http\Controllers\Admin\ViolationController as AdminViolationController;
 
-    // Auth
-    Route::get('/login', fn () => view('student.auth.login'))->name('login');
-    Route::get('/register', fn () => view('student.auth.register'))->name('register');
-    Route::get('/forgot-password', fn () => view('student.auth.forgot-password'))->name('forgot');
-    Route::get('/verify-code', fn () => view('student.auth.verify-code'))->name('verify');
+/*
+|--------------------------------------------------------------------------
+| STUDENT/MAHASISWA (Web)
+|--------------------------------------------------------------------------
+*/
+use App\Http\Controllers\Mahasiswa\KendaraanController as MahasiswaKendaraanController;
+use App\Http\Controllers\Mahasiswa\ScanLogController as MahasiswaScanLogController;
+use App\Http\Controllers\Mahasiswa\ViolationController as MahasiswaViolationController;
 
-    // App
-    Route::get('/dashboard', fn () => view('student.dashboard.user'))->name('dashboard');
+/*
+|--------------------------------------------------------------------------
+| INTERNAL API (AJAX - session cookie)
+|--------------------------------------------------------------------------
+*/
+use App\Http\Controllers\InternalApi\Admin\ScanController as AdminScanApiController;
+use App\Http\Controllers\InternalApi\Admin\ScanLogController as AdminScanLogApiController;
+use App\Http\Controllers\InternalApi\Admin\KendaraanLookupController as AdminKendaraanLookupApiController;
 
-    Route::get('/vehicles', fn () => view('student.vehicles.show'))->name('vehicles.index');
-    Route::get('/vehicles/create', fn () => view('student.vehicles.create'))->name('vehicles.create');
-    Route::get('/vehicles/edit', fn () => view('student.vehicles.edit'))->name('vehicles.edit');
+use App\Http\Controllers\InternalApi\Mahasiswa\ScanLogController as MahasiswaScanLogApiController;
+use App\Http\Controllers\InternalApi\Mahasiswa\ViolationController as MahasiswaViolationApiController;
 
-    Route::get('/violations', fn () => view('student.violations.index'))->name('violations.index');
+/*
+|--------------------------------------------------------------------------
+| Public routes
+|--------------------------------------------------------------------------
+*/
+Route::get('/', function () {
+    // Kalau mau landing page:
+    return view('landing.index');
 
-    Route::get('/timestamp', fn () => view('timestamp.index'))->name('timestamp');
+    // Kalau mau langsung login:
+    // return redirect()->route('student.login');
 });
 
 /*
 |--------------------------------------------------------------------------
-| ADMIN (UI Views)
+| STUDENT AUTH (views in resources/views/student/auth)
 |--------------------------------------------------------------------------
-| View path:
-| resources/views/admin/...
+*/
+Route::get('/login', fn () => view('student.auth.login'))->name('login'); // biar route('login') tetap works
+Route::get('/register', fn () => view('student.auth.register'))->name('register');
+Route::get('/forgot-password', fn () => view('student.auth.forgot-password'))->name('password.request');
+Route::get('/verify-code', fn () => view('student.auth.verify-code'))->name('verify.code');
+
+/*
+|--------------------------------------------------------------------------
+| AUTH ACTIONS (POST) - tetap pakai controller kamu
+|--------------------------------------------------------------------------
+*/
+Route::post('/login', [LoginController::class, 'login'])->name('login.attempt');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+/*
+|--------------------------------------------------------------------------
+| ADMIN AUTH (views in resources/views/admin/auth)
+|--------------------------------------------------------------------------
+| NOTE: Ini page login admin, bukan dashboard.
+| Dashboard admin tetap di group middleware role:admin di bawah.
 */
 Route::prefix('admin')->name('admin.')->group(function () {
-
-    // Auth
     Route::get('/login', fn () => view('admin.auth.login'))->name('login');
     Route::get('/register', fn () => view('admin.auth.register'))->name('register');
-
-    // Pages
-    Route::get('/dashboard', fn () => view('admin.dashboard'))->name('dashboard');
-    Route::get('/locations', fn () => view('admin.locations'))->name('locations');
-    Route::get('/statistics', fn () => view('admin.statistics'))->name('statistics');
-    Route::get('/settings', fn () => view('admin.settings'))->name('settings');
-    Route::get('/scan', fn () => view('admin.scan'))->name('scan');
-    Route::get('/violations', fn () => view('admin.violations'))->name('violations');
-    Route::get('/vehicle-logs', fn () => view('admin.vehicle_logs'))->name('vehicle_logs');
 });
-
-/*
-|--------------------------------------------------------------------------
-| SHORTCUTS (optional)
-|--------------------------------------------------------------------------
-| Kalau kamu pengen URL lama tetap hidup tanpa /student,
-| kamu bisa arahkan ke route student:
-*/
-Route::get('/login', fn () => redirect()->route('student.login'))->name('login');
-Route::get('/register', fn () => redirect()->route('student.register'))->name('register');
-Route::get('/dashboard', fn () => redirect()->route('student.dashboard'))->name('dashboard');
-
-/*
-|--------------------------------------------------------------------------
-| LOGOUT (dummy)
-|--------------------------------------------------------------------------
-*/
-Route::post('/logout', function () {
-    request()->session()->flush();
-    return redirect('/');
-})->name('logout');
-

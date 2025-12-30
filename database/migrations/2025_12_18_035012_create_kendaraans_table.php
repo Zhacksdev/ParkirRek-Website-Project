@@ -6,27 +6,31 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('kendaraans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('mahasiswa_id')
+
+            $table->foreignId('user_id')
                 ->constrained('users')
-                ->onDelete('cascade');
-            $table->string('jenis_kendaraan');
-            $table->string('plat_no');
-            $table->dateTime('jam_masuk')->nullable();
-            $table->dateTime('jam_keluar')->nullable();
+                ->cascadeOnDelete();
+
+            $table->enum('jenis_kendaraan', ['motor', 'mobil']);
+            $table->string('plat_no', 20)->unique();
+            $table->string('stnk_number', 50);
+
+            // opsional: foto STNK
+            $table->string('stnk_photo_path')->nullable();
+
+            // dipakai scan QR
+            $table->uuid('qr_token')->unique();
+
             $table->timestamps();
+
+            $table->index(['user_id', 'created_at']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('kendaraans');

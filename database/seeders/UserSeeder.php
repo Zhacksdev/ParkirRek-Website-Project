@@ -1,31 +1,35 @@
 <?php
+
 namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Faker\Factory as Faker;
+use App\Models\User;
 
-class UserSeeder extends Seeder {
-    public function run(): void {
-        $faker = Faker::create('id_ID');
-        // Hapus data lama
-        DB::table('users')->delete();
-
-        // 1. Admin & User Tetap
-        DB::table('users')->insert([
-            ['nama' => 'Super Admin', 'email' => 'admin@parkir.com', 'password' => Hash::make('password'), 'role' => 'admin', 'created_at' => now(), 'updated_at' => now()],
-            ['nama' => 'Mahasiswa Demo', 'email' => 'user@parkir.com', 'password' => Hash::make('password'), 'role' => 'user', 'created_at' => now(), 'updated_at' => now()]
+class UserSeeder extends Seeder
+{
+    public function run(): void
+    {
+        // =====================
+        // ADMIN
+        // =====================
+        User::create([
+            'nama' => 'Admin Parkir',
+            'email' => 'admin@parkir.test',
+            'password' => Hash::make('password'),
+            'role' => 'admin',
+            'area' => 'Gerbang Utama',
         ]);
 
-        // 2. Dummy Users
-        for ($i = 0; $i < 20; $i++) {
-            DB::table('users')->insert([
-                'nama' => $faker->name,
-                'email' => $faker->unique()->userName . '@student.telkom.ac.id',
-                'password' => Hash::make('password'),
-                'role' => 'user',
-                'created_at' => now(), 'updated_at' => now(),
-            ]);
-        }
+        // =====================
+        // MAHASISWA / STUDENT
+        // =====================
+        User::create([
+            'nama' => 'Mahasiswa Demo',
+            'email' => 'mahasiswa@parkir.test',
+            'password' => Hash::make('password'),
+            'role' => 'student',
+            'area' => null,
+        ]);
     }
 }
