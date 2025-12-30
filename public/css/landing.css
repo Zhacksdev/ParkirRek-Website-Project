@@ -1,0 +1,282 @@
+:root {
+    --maroon: #7b1e2b;
+    --soft-pink: #fdf4f5;
+}
+
+/* GLOBAL */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    padding-top: 80px;
+}
+
+/* NAVBAR */
+.text-maroon {
+    color: var(--maroon);
+}
+
+.logo-circle {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background: var(--maroon);
+    color: white;
+    text-align: center;
+    line-height: 32px;
+    border-radius: 8px;
+    margin-right: 6px;
+}
+
+.btn-maroon {
+    background: var(--maroon);
+    color: white;
+    border-radius: 10px;
+
+}
+
+.btn-maroon:hover {
+    background: #641722;
+    color: white;
+}
+
+.btn-outline-maroon {
+    border: 1px solid var(--maroon);
+    color: var(--maroon);
+    border-radius: 10px;
+
+}
+
+/* HERO */
+.hero-section {
+    padding: 90px 0 70px;
+}
+
+.hero-title {
+    font-size: 48px;
+    font-weight: 700;
+}
+
+.hero-title span {
+    color: var(--maroon);
+}
+
+.hero-subtitle {
+    max-width: 700px;
+    margin: 20px auto;
+    color: #666;
+}
+
+/* FEATURES */
+.features-section {
+    padding-bottom: 80px;
+}
+
+.feature-card {
+    background: var(--soft-pink);
+    border: 1px solid #f1c9cf;
+    border-radius: 16px;
+    padding: 60px 30px;
+    height: 100%;
+}
+
+.icon-circle {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 20px;
+    background: #e6c6cb;
+    color: var(--maroon);
+    border-radius: 50%;
+    font-size: 32px;
+    line-height: 70px;
+    font-weight: bold;
+}
+
+.icon-qr {
+    font-size: 48px;
+    color: #e6c6cb;
+    margin-bottom: 20px;
+}
+
+/* FULL FEATURES SECTION */
+.features-full-section {
+    padding: 100px 0;
+    background: #fff;
+}
+
+/* FEATURE CARD */
+.feature-box {
+    background: white;
+    border-radius: 14px;
+    padding: 30px;
+    height: 100%;
+    border-left: 4px solid var(--maroon);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    transition: all 0.3s ease;
+}
+
+.feature-box:hover {
+    transform: translateY(-6px);
+}
+
+/* ICON */
+.feature-icon {
+    width: 44px;
+    height: 44px;
+    background: #f3e3e6;
+    color: var(--maroon);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+/* TEXT */
+.feature-box h5 {
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.feature-box p {
+    color: #666;
+    font-size: 14px;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Feature Card */
+.feature-card {
+    background: #fff7f7;
+    border: 1px solid #f3caca;
+    border-radius: 16px;
+    padding: 40px 20px;
+    transition: all 0.3s ease;
+}
+
+/* QR Icon Container */
+.qr-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    background: #fbeaea;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* QR Icon Itself */
+.qr-icon i {
+    font-size: 42px;
+    color: rgba(128, 0, 32, 0.35); /* maroon soft */
+}
+
+/* Hover effect (optional but cakep) */
+.feature-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(128, 0, 32, 0.15);
+}
+
+.choose-role-section {
+    padding: 80px 0;
+}
+
+/* CARD UTAMA */
+.role-card {
+    height: 100%; /* 🔑 bikin tinggi sama */
+    background: #ffffff;
+    border: 2px solid #f3b6be; /* garis pink soft */
+    border-radius: 18px;
+    padding: 32px 28px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+/* LIST */
+.role-list {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: auto; /* 🔑 dorong tombol ke bawah */
+}
+
+.role-list li {
+    position: relative;
+    padding-left: 26px;
+    margin-bottom: 12px;
+    font-size: 15px;
+    color: #333;
+}
+
+/* BULLET BULAT MERAH */
+.role-list li::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    background-color: #8b1e2d;
+    border-radius: 50%;
+    position: absolute;
+    left: 0;
+    top: 6px;
+}
+
+/* BUTTON */
+.btn-student {
+    background-color: #fff;
+    color: #8b1e2d;
+    border: 2px solid #8b1e2d;
+    border-radius: 30px;
+    padding: 10px;
+}
+
+.btn-student:hover {
+    background-color: #741826;
+    color: #fff;
+}
+
+.btn-security {
+    background-color: #fff;
+    color: #8b1e2d;
+    border: 2px solid #8b1e2d;
+    border-radius: 30px;
+    padding: 10px;
+}
+
+.btn-security:hover {
+    background-color: #8b1e2d;
+    color: #fff;
+}
+/* PARKING ICON (NEW STYLE) */
+.parking-icon {
+    width: 88px;
+    height: 88px;
+    margin: 0 auto 24px;
+    border-radius: 50%;
+    border: 5px solid #e7cfd3; /* ring luar soft pink */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.parking-icon span {
+    width: 56px;
+    height: 56px;
+    background-color: #e7cfd3; /* isi lingkaran */
+    color: #7b1e2b;           /* maroon */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.feature-card:hover .parking-icon {
+    border-color: #d8b0b7;
+}
+
+.feature-card:hover .parking-icon span {
+    background-color: #d8b0b7;
+}

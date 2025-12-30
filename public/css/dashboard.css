@@ -1,0 +1,864 @@
+/* Dashboard Variables */
+:root {
+    --maroon: #7b1e2b;
+    --light-maroon: #fdf4f5;
+    --dark-maroon: #641722;
+    --card-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Body Padding for Fixed Navbar */
+body {
+    padding-top: 76px;
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+/* Navbar Styles */
+.navbar {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    padding: 1rem 0;
+}
+
+.text-maroon {
+    color: var(--maroon) !important;
+}
+
+.logo-circle {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background: var(--maroon);
+    color: white;
+    text-align: center;
+    line-height: 32px;
+    border-radius: 8px;
+    margin-right: 6px;
+}
+
+.btn-maroon {
+    background: var(--maroon);
+    color: white;
+    border-radius: 10px;
+    border: none;
+}
+
+.btn-maroon:hover {
+    background: var(--dark-maroon);
+    color: white;
+}
+
+.btn-outline-maroon {
+    border: 1px solid var(--maroon);
+    color: var(--maroon);
+    border-radius: 10px;
+}
+
+.btn-outline-maroon:hover {
+    background: var(--maroon);
+    color: white;
+}
+
+/* User Avatar */
+.avatar-circle {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, var(--maroon), var(--dark-maroon));
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* Dashboard Content */
+.dashboard-wrapper {
+    min-height: calc(100vh - 76px);
+}
+
+/* Stats Cards */
+.stat-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.2s;
+    border-left: 4px solid var(--maroon);
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--light-maroon);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--maroon);
+    font-size: 1.2rem;
+}
+
+/* Activity Items */
+.activity-item {
+    transition: background-color 0.2s;
+}
+
+.activity-item:hover {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+}
+
+.activity-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    background: #e8f4ff;
+    color: #007bff;
+}
+
+.activity-icon.booking {
+    background: #e7f9ed;
+    color: #28a745;
+}
+
+.activity-icon.vehicle {
+    background: #fff3cd;
+    color: #ffc107;
+}
+
+/* Violations */
+.violation-count {
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--maroon);
+    line-height: 1;
+}
+
+.violation-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--light-maroon);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--maroon);
+}
+
+/* Add Vehicle Card */
+.add-vehicle-card {
+    background: linear-gradient(135deg, var(--light-maroon), #fff5f7);
+    border: 2px dashed var(--maroon) !important;
+}
+
+.add-icon {
+    width: 48px;
+    height: 48px;
+    background: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--maroon);
+    font-size: 1.5rem;
+    border: 1px solid var(--light-maroon);
+}
+
+/* Nav Pills Custom */
+.nav-pills .nav-link {
+    border-radius: 8px;
+    color: #666;
+    padding: 0.75rem;
+    border: 1px solid #dee2e6;
+}
+
+.nav-pills .nav-link.active {
+    background: var(--maroon);
+    color: white;
+    border-color: var(--maroon);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    body {
+        padding-top: 70px;
+    }
+
+    .navbar-collapse {
+        margin-top: 1rem;
+    }
+
+    .stat-card {
+        margin-bottom: 1rem;
+    }
+
+    .violation-count {
+        font-size: 3rem;
+    }
+}
+/* NAVBAR ACTIVE STATE */
+.nav-link.active {
+    background-color: var(--maroon) !important;
+    color: white !important;
+    border-radius: 8px;
+}
+
+/* Agar tidak full width */
+.container-fluid.px-4 {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Container untuk content */
+.col-xxl-10 {
+    max-width: 1400px;
+}
+
+/* Booking Parkir Page Styles */
+.booking-card {
+    transition: all 0.3s ease;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+}
+
+.booking-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    border-color: var(--maroon);
+}
+
+.info-icon {
+    width: 32px;
+    height: 32px;
+    background: var(--light-maroon);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--maroon);
+    font-size: 1rem;
+}
+
+.upcoming-item {
+    transition: all 0.2s ease;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+}
+
+.upcoming-item:hover {
+    border-color: var(--maroon);
+    background-color: var(--light-maroon);
+}
+
+.upcoming-date {
+    min-width: 60px;
+    background: var(--light-maroon);
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid rgba(123, 30, 43, 0.1);
+}
+
+/* Booking Page */
+.booking-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.75rem 2rem;
+    box-shadow: var(--card-shadow);
+    border-left: 6px solid var(--maroon);
+}
+
+.booking-status {
+    color: #16a34a;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.nav-link {
+    transition: all 0.2s ease;
+}
+.booking-status {
+    min-width: 130px;
+    text-align: right;
+}
+
+.status-completed {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #28a745;
+    white-space: nowrap;
+}
+
+.booking-card h6 {
+    font-size: 0.85rem;
+}
+
+.booking-card strong {
+    font-size: 0.95rem;
+}
+
+.status-canceled {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #dc3545; /* Bootstrap danger red x*/
+    white-space: nowrap;
+}
+
+/* MY VEHICLES PAGE */
+.vehicles-page {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.btn-add-vehicle-top {
+    padding: 0.65rem 1rem;
+}
+
+.vehicle-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.vehicle-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 1.75rem 2rem;
+
+    box-shadow: var(--card-shadow);
+    border-left: 6px solid var(--maroon);
+
+    display: grid;
+    grid-template-columns: 1.4fr 0.8fr 0.8fr 0.45fr;
+    align-items: center;
+    gap: 14px;
+}
+
+
+.vehicle-name {
+    font-weight: 700;
+    letter-spacing: -0.01px;
+}
+
+.vehicle-plate {
+    color: var(--maroon);
+    font-weight: 700;
+    letter-spacing: 0.06px;
+}
+
+.vehicle-meta {
+    font-size: 0.9rem;
+}
+
+.vehicle-status {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+}
+
+.vehicle-status-label {
+    font-size: 0.78rem;
+    color: #6c757d;
+}
+
+.badge-soft {
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    font-weight: 700;
+    border: 1px solid transparent;
+}
+
+.badge-verified {
+    background: #e8f7ef;
+    color: #1f7a4d;
+    border-color: #c9efd9;
+}
+
+.badge-pending {
+    background: #fff4df;
+    color: #b06a00;
+    border-color: #ffe3b3;
+}
+
+.badge-parked {
+    background: #e9efff;
+    color: #2f58d6;
+    border-color: #cedbff;
+}
+
+.badge-notparked {
+    background: #ffe9ea;
+    color: #b4232b;
+    border-color: #ffd0d3;
+}
+
+.vehicle-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.icon-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid #e9ecef;
+    background: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+}
+
+.icon-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(0,0,0,.08);
+}
+
+.icon-btn.danger {
+    color: #dc3545;
+}
+
+.icon-btn.danger:hover {
+    border-color: #ffd0d3;
+    background: #fff7f7;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .vehicle-card {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .vehicle-status {
+        align-items: flex-start;
+    }
+
+    .vehicle-actions {
+        justify-content: flex-start;
+    }
+}
+
+/* VIOLATIONS PAGE */
+.violation-card{
+    background: #fff;
+    border-radius: 16px;
+    padding: 1.75rem 2rem;
+    box-shadow: var(--card-shadow);
+    border-left: 6px solid var(--maroon) !important;
+    border-top: 1px solid #e9ecef;
+    border-right: 1px solid #e9ecef;
+    border-bottom: 1px solid #e9ecef;
+
+    transition: all 0.3s ease;
+}
+
+.violation-card:hover{
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.10);
+}
+
+.violation-points{
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #dc3545;
+    white-space: nowrap;
+}
+
+/* ===== Mini Cards (Timestamp / Add Vehicle) ===== */
+.dash-mini-card{
+    background: #fdeff1;
+    border: 1px solid rgba(123,30,43,.20);
+    border-radius: 16px;
+    padding: 18px 18px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+.dash-mini-card i{
+    font-size: 1.2rem;
+}
+
+.btn-mini{
+    border-radius: 10px;
+    padding: 0.65rem 1rem;
+    font-weight: 600;
+}
+
+/* ===== Logbook Timeline (like image) ===== */
+.logbook-panel{
+    margin-top: 6px;
+}
+
+.logbook-search{
+    width: min(520px, 100%);
+}
+
+.logbook-search .form-control{
+    height: 40px;
+    border-radius: 999px;
+    background: #ececec;
+    border: 1px solid #e2e2e2;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.logbook-search .form-control:focus{
+    background: #fff;
+    border-color: rgba(123,30,43,.25);
+    box-shadow: 0 0 0 .25rem rgba(123,30,43,.10);
+}
+
+.logbook-day-title{
+    font-size: 0.85rem;
+    margin: 12px 2px 10px;
+}
+
+.logbook-item{
+    background: #eef0f2;
+    border: 1px solid #e2e4e7;
+    border-radius: 16px;
+    padding: 10px 14px;
+    margin-bottom: 10px;
+
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.time-pill{
+    min-width: 92px;
+    padding: 6px 14px;
+    background: #fff;
+    border: 1px solid #cfd3d8;
+    border-radius: 999px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.logbook-text{
+    flex: 1;
+    font-weight: 600;
+    color: #111827;
+}
+
+.status-dot{
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+}
+
+.dot-blue{ background:#2563eb; }
+.dot-green{ background:#16a34a; }
+.dot-red{ background:#dc2626; }
+.dot-orange{ background:#f59e0b; }
+
+/* ===== Add Vehicle Form ===== */
+.vehicle-form-card{
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 16px;
+    padding: 22px 22px;
+    box-shadow: var(--card-shadow);
+}
+
+.form-soft{
+    border-radius: 10px;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    padding: 10px 12px;
+}
+
+.form-soft:focus{
+    background: #fff;
+    border-color: rgba(123,30,43,.25);
+    box-shadow: 0 0 0 .25rem rgba(123,30,43,.10);
+}
+
+.upload-box{
+    width: 100%;
+    border: 1.5px dashed #d1d5db;
+    border-radius: 12px;
+    padding: 18px;
+    display: block;
+    cursor: pointer;
+    background: #fff;
+    transition: all .15s ease;
+}
+
+.upload-box:hover{
+    border-color: rgba(123,30,43,.35);
+    background: #fff7f8;
+}
+
+.upload-inner{
+    text-align: center;
+}
+
+.upload-icon{
+    font-size: 1.7rem;
+    color: #6b7280;
+    display: inline-block;
+    margin-bottom: 6px;
+}
+
+.upload-text{
+    font-weight: 600;
+    color: #111827;
+}
+
+.upload-subtext{
+    font-size: .8rem;
+    color: #6b7280;
+}
+
+.note-box{
+    background: #eaf2ff;
+    border: 1px solid #cfe1ff;
+    color: #1e3a8a;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: .8rem;
+}
+
+/* ===== Delete Modal Theme ===== */
+.delete-modal{
+    border-radius: 16px;
+    box-shadow: var(--card-shadow);
+}
+
+.delete-preview{
+    background: #fff5f6;
+    border: 1px solid rgba(123,30,43,.18);
+    border-radius: 12px;
+    padding: 12px 14px;
+}
+
+/* ===== TIMESTAMP PAGE ===== */
+.timestamp-filter{
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 16px;
+    padding: 16px 16px;
+    box-shadow: var(--card-shadow);
+}
+
+.filter-input{
+    border-radius: 12px;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    padding: 10px 12px;
+}
+
+.filter-input:focus{
+    background: #fff;
+    border-color: rgba(123,30,43,.25);
+    box-shadow: 0 0 0 .25rem rgba(123,30,43,.10);
+}
+
+.ts-mini{
+    background: #fff;
+    border-radius: 16px;
+    padding: 16px 16px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid #e9ecef;
+    border-left: 6px solid var(--maroon);
+}
+
+.ts-mini-icon{
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: var(--light-maroon);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--maroon);
+    font-size: 1.2rem;
+    border: 1px solid rgba(123,30,43,.12);
+}
+.ts-mini-icon.soft-blue{
+    background: #e9efff;
+    color: #2f58d6;
+    border-color: #cedbff;
+}
+.ts-mini-icon.soft-green{
+    background: #e8f7ef;
+    color: #1f7a4d;
+    border-color: #c9efd9;
+}
+
+.ts-card{
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px 20px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid #e9ecef;
+    border-left: 6px solid var(--maroon);
+}
+
+.ts-day{
+    margin-top: 14px;
+}
+
+.ts-day-title{
+    font-size: 0.85rem;
+    margin: 12px 2px 10px;
+    color: #111827;
+    font-weight: 700;
+}
+
+.ts-item{
+    background: #eef0f2;
+    border: 1px solid #e2e4e7;
+    border-radius: 16px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.ts-time{
+    min-width: 92px;
+    padding: 8px 14px;
+    background: #fff;
+    border: 1px solid #cfd3d8;
+    border-radius: 999px;
+    font-weight: 800;
+    text-align: center;
+}
+
+.ts-body{
+    flex: 1;
+}
+
+.ts-title{
+    font-weight: 800;
+    color: #111827;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ts-meta{
+    font-size: 0.9rem;
+    color: #6b7280;
+    margin-top: 2px;
+}
+
+.ts-dot{
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+}
+.dot-blue{ background:#2563eb; }
+.dot-green{ background:#16a34a; }
+.dot-red{ background:#dc2626; }
+.dot-orange{ background:#f59e0b; }
+
+.ts-badge{
+    padding: 0.35rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    border: 1px solid transparent;
+}
+
+.badge-in{
+    background: #e9efff;
+    color: #2f58d6;
+    border-color: #cedbff;
+}
+.badge-out{
+    background: #e8f7ef;
+    color: #1f7a4d;
+    border-color: #c9efd9;
+}
+.badge-violation{
+    background: #ffe9ea;
+    color: #b4232b;
+    border-color: #ffd0d3;
+}
+.badge-process{
+    background: #fff4df;
+    color: #b06a00;
+    border-color: #ffe3b3;
+}
+.badge-verified{
+    background: #e8f7ef;
+    color: #1f7a4d;
+    border-color: #c9efd9;
+}
+
+
+/* ===== Vehicles List Card ===== */
+.vehicle-card{
+    background:#fff;
+    border-radius:16px;
+    padding: 1.75rem 2rem;
+    box-shadow: var(--card-shadow);
+    border-left: 6px solid var(--maroon);
+
+    display: grid;
+    grid-template-columns: 1.6fr 0.9fr 0.45fr;
+    align-items: center;
+    gap: 14px;
+}
+
+/* ===== Vehicle QR Detail (Right Panel) ===== */
+.vehicle-qr-card{
+    background:#fff;
+    border-radius:16px;
+    padding: 1.5rem 1.5rem;
+    box-shadow: var(--card-shadow);
+    border-left: 6px solid var(--maroon);
+}
+
+.qr-box{
+    border: 1px solid #e9ecef;
+    border-radius: 16px;
+    padding: 18px;
+}
+
+/* QR icon wrapper (clean) */
+.qr-icon-wrapper{
+    width: 160px;
+    height: 160px;
+    margin: 0 auto;
+    border-radius: 24px;
+    background: #fff;
+    border: 2px solid rgba(123,30,43,.25);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.qr-icon-wrapper i{
+    font-size: 110px; /* biar ikon QR-nya beneran gede */
+    line-height: 1;
+    color: #7b1e2b;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .vehicle-card{
+        grid-template-columns: 1fr;
+    }
+    .vehicle-actions{
+        justify-content: flex-start;
+    }
+}
