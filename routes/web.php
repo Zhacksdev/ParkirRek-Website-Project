@@ -6,8 +6,10 @@ Route::get('/', fn () => view('landing.index'));
 
 /*
 |--------------------------------------------------------------------------
-| STUDENT
+| STUDENT (UI Views)
 |--------------------------------------------------------------------------
+| View path:
+| resources/views/student/...
 */
 Route::prefix('student')->name('student.')->group(function () {
 
@@ -19,9 +21,11 @@ Route::prefix('student')->name('student.')->group(function () {
 
     // App
     Route::get('/dashboard', fn () => view('student.dashboard.user'))->name('dashboard');
+
     Route::get('/vehicles', fn () => view('student.vehicles.show'))->name('vehicles.index');
     Route::get('/vehicles/create', fn () => view('student.vehicles.create'))->name('vehicles.create');
     Route::get('/vehicles/edit', fn () => view('student.vehicles.edit'))->name('vehicles.edit');
+
     Route::get('/violations', fn () => view('student.violations.index'))->name('violations.index');
 
     Route::get('/timestamp', fn () => view('timestamp.index'))->name('timestamp');
@@ -29,8 +33,10 @@ Route::prefix('student')->name('student.')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| ADMIN
+| ADMIN (UI Views)
 |--------------------------------------------------------------------------
+| View path:
+| resources/views/admin/...
 */
 Route::prefix('admin')->name('admin.')->group(function () {
 
@@ -38,7 +44,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', fn () => view('admin.auth.login'))->name('login');
     Route::get('/register', fn () => view('admin.auth.register'))->name('register');
 
-    // Dashboard pages
+    // Pages
     Route::get('/dashboard', fn () => view('admin.dashboard'))->name('dashboard');
     Route::get('/locations', fn () => view('admin.locations'))->name('locations');
     Route::get('/statistics', fn () => view('admin.statistics'))->name('statistics');
@@ -50,6 +56,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
+| SHORTCUTS (optional)
+|--------------------------------------------------------------------------
+| Kalau kamu pengen URL lama tetap hidup tanpa /student,
+| kamu bisa arahkan ke route student:
+*/
+Route::get('/login', fn () => redirect()->route('student.login'))->name('login');
+Route::get('/register', fn () => redirect()->route('student.register'))->name('register');
+Route::get('/dashboard', fn () => redirect()->route('student.dashboard'))->name('dashboard');
+
+/*
+|--------------------------------------------------------------------------
 | LOGOUT (dummy)
 |--------------------------------------------------------------------------
 */
@@ -57,3 +74,4 @@ Route::post('/logout', function () {
     request()->session()->flush();
     return redirect('/');
 })->name('logout');
+
