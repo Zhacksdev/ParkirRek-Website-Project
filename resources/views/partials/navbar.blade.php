@@ -27,15 +27,15 @@
         </div>
 
         <div class="dropdown">
-            <button class="btn btn-outline-maroon dropdown-toggle d-flex align-items-center"
-<<<<<<< HEAD
-                type="button" data-bs-toggle="dropdown">
-=======
-                    type="button" data-bs-toggle="dropdown">
->>>>>>> admin-meefol
+            <button
+                class="btn btn-outline-maroon dropdown-toggle d-flex align-items-center"
+                type="button"
+                data-bs-toggle="dropdown"
+            >
                 <div class="avatar-circle me-2">S</div>
                 <span>Jingga</span>
             </button>
+
             <ul class="dropdown-menu dropdown-menu-end">
                 <li>
                     <a class="dropdown-item" href="#">
@@ -47,13 +47,9 @@
                         <i class="bi bi-gear me-2"></i> Settings
                     </a>
                 </li>
-<<<<<<< HEAD
-                <li>
-                    <hr class="dropdown-divider">
-                </li>
-=======
+
                 <li><hr class="dropdown-divider"></li>
->>>>>>> admin-meefol
+
                 <li>
                     <a class="dropdown-item text-danger" href="/">
                         <i class="bi bi-box-arrow-right me-2"></i> Logout
@@ -62,8 +58,4 @@
             </ul>
         </div>
     </div>
-<<<<<<< HEAD
 </nav>
-=======
-</nav>
->>>>>>> admin-meefol
