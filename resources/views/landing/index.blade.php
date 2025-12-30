@@ -5,21 +5,9 @@
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg bg-white shadow-sm fixed-top">
     <div class="container">
-        <a class="navbar-brand fw-bold text-maroon" href="#">
+        <a class="navbar-brand fw-bold text-maroon" href="{{ url('/') }}">
             <span class="logo-circle">P</span> ParkiRek
         </a>
-
-        <div class="collapse navbar-collapse justify-content-center">
-            <ul class="navbar-nav gap-4">
-                <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
-                <li class="nav-item"><a class="nav-link" href="#for-you">For You</a></li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/login">Login</a>
-                </li>
-            </ul>
-        </div>
-
-        <a href="/login" class="btn btn-maroon">Sign In</a>
     </div>
 </nav>
 
@@ -36,7 +24,7 @@
         </p>
 
         <div class="d-flex justify-content-center gap-3 mt-4">
-            <a href="/login" class="btn btn-maroon px-4">Student Login</a>
+            <a href="{{ route('student.login') }}" class="btn btn-maroon px-4">Student Login</a>
             <a href="{{ route('admin.login') }}" class="btn btn-outline-maroon px-4">Security Portal</a>
         </div>
     </div>
@@ -153,7 +141,9 @@
                     <li>Track parking violations</li>
                 </ul>
 
-                <a href="/register" class="btn btn-student w-100 mt-3">Register as Student</a>
+                <a href="{{ route('student.login') }}" class="btn btn-student w-100 mt-3">
+                    Register as Student
+                </a>
             </div>
         </div>
 
