@@ -24,8 +24,8 @@
         </p>
 
         <div class="d-flex justify-content-center gap-3 mt-4">
-            <a href="{{ route('student.login') }}" class="btn btn-maroon px-4">Student Login</a>
-            <a href="{{ route('admin.login') }}" class="btn btn-outline-maroon px-4">Security Portal</a>
+            <a href="{{ route('student.auth.login') }}" class="btn btn-maroon px-4">Student Login</a>
+            <a href="{{ route('admin.auth.login') }}" class="btn btn-outline-maroon px-4">Security Portal</a>
         </div>
     </div>
 </section>
@@ -141,7 +141,7 @@
                     <li>Track parking violations</li>
                 </ul>
 
-                <a href="{{ route('student.login') }}" class="btn btn-student w-100 mt-3">
+                <a href="{{ route('student.auth.login') }}" class="btn btn-student w-100 mt-3">
                     Register as Student
                 </a>
             </div>
@@ -162,7 +162,7 @@
                     <li>Generate parking reports</li>
                 </ul>
 
-                <a href="{{ route('admin.login') }}" class="btn btn-security w-100 mt-3">
+                <a href="{{ route('admin.auth.login') }}" class="btn btn-security w-100 mt-3">
                     Security Login
                 </a>
             </div>

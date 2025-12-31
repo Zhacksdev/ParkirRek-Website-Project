@@ -3,143 +3,176 @@
 @section('content')
 <div class="container-fluid px-5 pt-3">
 
-    <!-- Page Header -->
+    <!-- Header -->
     <div class="mb-4">
         <h1 class="fw-bold mb-1 d-flex align-items-center gap-2">
-            Parking Violations <i class="bi bi-exclamation-circle text-maroon opacity-75"></i>
+            Parking Violations
+            <i class="bi bi-exclamation-circle text-maroon opacity-75"></i>
         </h1>
         <p class="text-muted fs-6 mb-0">Your violation history and status</p>
     </div>
 
-    <!-- Violation Card (Booking-style) -->
-    <!-- Violation Card 1 -->
-    <div class="violation-card mb-3">
-        <div class="row align-items-center gy-2">
-            <div class="col-md-3">
-                <small class="text-muted">Violation</small>
-                <div class="fw-semibold fs-6 text-maroon">Double Parking</div>
-                <div class="text-muted small mt-1">
-                    <i class="bi bi-car-front me-1"></i> Car
+    <div class="d-grid gap-3">
+
+        @forelse ($violations as $v)
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-3 p-md-4">
+                    <div class="row g-3 align-items-center">
+
+                        <!-- Violation -->
+                        <div class="col-12 col-md-4">
+                            <div class="d-flex gap-3">
+                                <div class="rounded-3 d-flex align-items-center justify-content-center"
+                                     style="width:42px;height:42px;background:rgba(123,30,43,.1);color:#7b1e2b;">
+                                    <i class="bi bi-exclamation-triangle"></i>
+                                </div>
+
+                                <div>
+                                    <div class="text-muted small">Violation</div>
+                                    <div class="fw-bold text-maroon">
+                                        {{ $v->jenis_pelanggaran }}
+                                    </div>
+                                    <div class="text-muted small mt-1">
+                                        Plate: <span class="fw-semibold">{{ $v->plat_no }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Date -->
+                        <div class="col-6 col-md-2">
+                            <div class="text-muted small">
+                                <i class="bi bi-calendar-event me-1"></i>Date
+                            </div>
+                            <div class="fw-semibold">
+                                {{ $v->created_at->format('d-m-Y') }}
+                            </div>
+                        </div>
+
+                        <!-- Time -->
+                        <div class="col-6 col-md-2">
+                            <div class="text-muted small">
+                                <i class="bi bi-clock me-1"></i>Reported
+                            </div>
+                            <div class="fw-semibold">
+                                {{ $v->created_at->format('H:i') }}
+                            </div>
+                        </div>
+
+                        <!-- Fine -->
+                        <div class="col-6 col-md-2">
+                            <div class="text-muted small">
+                                <i class="bi bi-cash-coin me-1"></i>Fine
+                            </div>
+                            <div class="fw-semibold">
+                                {{ $v->denda ? 'Rp '.number_format($v->denda,0,',','.') : '-' }}
+                            </div>
+                        </div>
+
+                        <!-- Status & Action -->
+                        <div class="col-6 col-md-2 text-md-end">
+                            @php
+                                $statusMap = [
+                                    'pending' => 'warning',
+                                    'resolved' => 'success',
+                                    'paid' => 'primary',
+                                    'rejected' => 'danger',
+                                ];
+                            @endphp
+
+                            <span class="badge rounded-pill text-bg-{{ $statusMap[$v->status] ?? 'secondary' }}">
+                                {{ ucfirst($v->status) }}
+                            </span>
+
+                            <div class="mt-2">
+                                <button
+                                    class="btn btn-sm btn-outline-maroon w-100 w-md-auto"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#violationModal{{ $v->id }}"
+                                >
+                                    Detail
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
 
-            <div class="col-md-2">
-                <small class="text-muted"><i class="bi bi-car-front me-1"></i>Vehicle</small>
-                <div class="fw-semibold fs-6">B 1234 XYZ</div>
-            </div>
+            <!-- DETAIL MODAL -->
+            <div class="modal fade" id="violationModal{{ $v->id }}" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content rounded-4">
+                        <div class="modal-header border-0">
+                            <h5 class="modal-title fw-bold">
+                                <i class="bi bi-exclamation-circle text-maroon me-2"></i>
+                                Violation Detail
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
 
-            <div class="col-md-2">
-                <small class="text-muted"><i class="bi bi-calendar-event me-1"></i>Date</small>
-                <div class="fw-semibold fs-6">22-12-2025</div>
-            </div>
+                        <div class="modal-body pt-0">
+                            <div class="mb-3">
+                                <div class="text-muted small">Violation</div>
+                                <div class="fw-semibold">{{ $v->jenis_pelanggaran }}</div>
+                            </div>
 
-            <div class="col-md-3">
-                <small class="text-muted"><i class="bi bi-clock me-1"></i>Time Reported</small>
-                <div class="fw-semibold fs-6">14:01</div>
-            </div>
+                            <div class="mb-3">
+                                <div class="text-muted small">Plate Number</div>
+                                <div class="fw-semibold">{{ $v->plat_no }}</div>
+                            </div>
 
-            <div class="col-md-2 text-end pe-3">
-                <span class="violation-points">+ 3 violation points</span>
-            </div>
-        </div>
-    </div>
+                            @if ($v->deskripsi)
+                                <div class="mb-3">
+                                    <div class="text-muted small">Description</div>
+                                    <div>{{ $v->deskripsi }}</div>
+                                </div>
+                            @endif
 
-    <!-- Violation Card 2 -->
-    <div class="violation-card mb-3">
-        <div class="row align-items-center gy-2">
-            <div class="col-md-3">
-                <small class="text-muted">Violation</small>
-                <div class="fw-semibold fs-6 text-maroon">Overtime Parking</div>
-                <div class="text-muted small mt-1">
-                    <i class="bi bi-car-front me-1"></i> Car
+                            <div class="mb-3">
+                                <div class="text-muted small">Fine</div>
+                                <div class="fw-semibold">
+                                    {{ $v->denda ? 'Rp '.number_format($v->denda,0,',','.') : '-' }}
+                                </div>
+                            </div>
+
+                            @if ($v->photo_path)
+                                <div class="mb-3">
+                                    <div class="text-muted small mb-1">Evidence Photo</div>
+                                    <div class="ratio ratio-16x9 rounded-3 overflow-hidden border">
+                                        <img
+                                            src="{{ asset('storage/'.$v->photo_path) }}"
+                                            class="w-100 h-100"
+                                            style="object-fit:cover;"
+                                        >
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+
+                        <div class="modal-footer border-0">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                Close
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="col-md-2">
-                <small class="text-muted"><i class="bi bi-car-front me-1"></i>Vehicle</small>
-                <div class="fw-semibold fs-6">B 5678 ABC</div>
+        @empty
+            <div class="text-center py-5 text-muted">
+                <i class="bi bi-check-circle fs-1 d-block mb-2 opacity-50"></i>
+                <div class="fw-semibold">No violations found</div>
+                <div class="small">You have no parking violations 🎉</div>
             </div>
+        @endforelse
 
-            <div class="col-md-2">
-                <small class="text-muted"><i class="bi bi-calendar-event me-1"></i>Date</small>
-                <div class="fw-semibold fs-6">20-12-2025</div>
-            </div>
-
-            <div class="col-md-3">
-                <small class="text-muted"><i class="bi bi-clock me-1"></i>Time Reported</small>
-                <div class="fw-semibold fs-6">18:45</div>
-            </div>
-
-            <div class="col-md-2 text-end pe-3">
-                <span class="violation-points">+ 2 violation points</span>
-            </div>
-        </div>
     </div>
 
-    <!-- Violation Card 3 -->
-    <div class="violation-card mb-3">
-        <div class="row align-items-center gy-2">
-            <div class="col-md-3">
-                <small class="text-muted">Violation</small>
-                <div class="fw-semibold fs-6 text-maroon">Wrong Slot</div>
-                <div class="text-muted small mt-1">
-                    <i class="bi bi-bicycle me-1"></i> Motorcycle
-                </div>
-            </div>
-
-            <div class="col-md-2">
-                <small class="text-muted"><i class="bi bi-bicycle me-1"></i>Vehicle</small>
-                <div class="fw-semibold fs-6">L 1254 DF</div>
-            </div>
-
-            <div class="col-md-2">
-                <small class="text-muted"><i class="bi bi-calendar-event me-1"></i>Date</small>
-                <div class="fw-semibold fs-6">19-12-2025</div>
-            </div>
-
-            <div class="col-md-3">
-                <small class="text-muted"><i class="bi bi-clock me-1"></i>Time Reported</small>
-                <div class="fw-semibold fs-6">09:12</div>
-            </div>
-
-            <div class="col-md-2 text-end pe-3">
-                <span class="violation-points">+ 1 violation points</span>
-            </div>
-        </div>
+    <!-- Pagination -->
+    <div class="mt-4">
+        {{ $violations->links() }}
     </div>
-
-    <!-- Violation Card 4 -->
-    <div class="violation-card mb-3">
-        <div class="row align-items-center gy-2">
-            <div class="col-md-3">
-                <small class="text-muted">Violation</small>
-                <div class="fw-semibold fs-6 text-maroon">Blocking Access</div>
-                <div class="text-muted small mt-1">
-                    <i class="bi bi-car-front me-1"></i> Car
-                </div>
-            </div>
-
-            <div class="col-md-2">
-                <small class="text-muted"><i class="bi bi-car-front me-1"></i>Vehicle</small>
-                <div class="fw-semibold fs-6">B 9012 JKL</div>
-            </div>
-
-            <div class="col-md-2">
-                <small class="text-muted"><i class="bi bi-calendar-event me-1"></i>Date</small>
-                <div class="fw-semibold fs-6">18-12-2025</div>
-            </div>
-
-            <div class="col-md-3">
-                <small class="text-muted"><i class="bi bi-clock me-1"></i>Time Reported</small>
-                <div class="fw-semibold fs-6">12:30</div>
-            </div>
-
-            <div class="col-md-2 text-end pe-3">
-                <span class="violation-points">+ 4 violation points</span>
-            </div>
-        </div>
-    </div>
-
 
 </div>
 @endsection

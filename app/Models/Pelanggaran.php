@@ -2,27 +2,24 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-
-use App\Models\User;
-use App\Models\Kendaraan;
 
 class Pelanggaran extends Model
 {
     use HasFactory;
 
-    protected $table = 'pelanggarans';
+    protected $table = 'pelanggarans'; // pastikan nama tabel kamu ini
 
     protected $fillable = [
-        'created_by',
         'kendaraan_id',
+        'created_by',
         'plat_no',
         'jenis_pelanggaran',
         'deskripsi',
-        'photo_path',
         'denda',
+        'photo_path',
         'status',
     ];
 
@@ -31,8 +28,14 @@ class Pelanggaran extends Model
         return $this->belongsTo(Kendaraan::class, 'kendaraan_id');
     }
 
-    public function admin(): BelongsTo
+    public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    // OPTIONAL: URL siap pakai untuk foto bukti
+    public function getPhotoUrlAttribute(): ?string
+    {
+        return $this->photo_path ? asset('storage/' . $this->photo_path) : null;
     }
 }

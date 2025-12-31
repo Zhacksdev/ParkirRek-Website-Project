@@ -24,10 +24,10 @@ class LoginController extends Controller
 
             // contoh redirect berdasarkan role
             if (($user->role ?? null) === 'admin') {
-                return redirect()->route('admin.dashboard.index');
+                return redirect()->route('admin.dashboard');
             }
 
-            return redirect()->route('mahasiswa.dashboard.index');
+            return redirect()->route('student.dashboard');
         }
 
         return back()->withErrors([

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Mahasiswa;
+namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Mahasiswa\StoreKendaraanRequest;
@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Http\Response;
 
 class KendaraanController extends Controller
 {
@@ -23,12 +25,12 @@ class KendaraanController extends Controller
             ->latest()
             ->paginate(10);
 
-        return view('mahasiswa.kendaraan.index', compact('kendaraans'));
+        return view('student.vehicles.show', compact('kendaraans'));
     }
 
     public function create(): View
     {
-        return view('mahasiswa.kendaraan.create');
+        return view('student.vehicles.create');
     }
 
     public function store(StoreKendaraanRequest $request): RedirectResponse
@@ -51,15 +53,14 @@ class KendaraanController extends Controller
         Kendaraan::create($data);
 
         return redirect()
-            ->route('mahasiswa.kendaraan.index')
+            ->route('student.vehicles.index')
             ->with('success', 'Kendaraan berhasil ditambahkan.');
     }
 
     public function edit(Kendaraan $kendaraan): View
     {
         $this->ensureOwner($kendaraan);
-
-        return view('mahasiswa.kendaraan.edit', compact('kendaraan'));
+        return view('student.vehicles.edit', compact('kendaraan'));
     }
 
     public function update(UpdateKendaraanRequest $request, Kendaraan $kendaraan): RedirectResponse
@@ -85,8 +86,8 @@ class KendaraanController extends Controller
         $kendaraan->update($data);
 
         return redirect()
-            ->route('mahasiswa.kendaraan.index')
-            ->with('success', 'Kendaraan berhasil diperbarui.');
+            ->route('student.vehicles.index')
+            ->with('success', 'Kendaraan berhasil ditambahkan.');
     }
 
     public function destroy(Kendaraan $kendaraan): RedirectResponse
@@ -99,11 +100,34 @@ class KendaraanController extends Controller
         }
 
         $kendaraan->delete();
-
         return redirect()
-            ->route('mahasiswa.kendaraan.index')
-            ->with('success', 'Kendaraan berhasil dihapus.');
+            ->route('student.vehicles.index')
+            ->with('success', 'Kendaraan berhasil ditambahkan.');
     }
+
+    public function qr(Kendaraan $kendaraan): Response
+    {
+        $this->ensureOwner($kendaraan);
+
+        $url = route('vehicle.scan', $kendaraan->qr_token);
+
+        $svg = QrCode::format('svg')
+            ->size(260)
+            ->margin(1)
+            ->generate($url);
+
+        return response($svg, 200)->header('Content-Type', 'image/svg+xml');
+    }
+
+    public function scan(string $token): View
+    {
+        $kendaraan = Kendaraan::query()
+            ->where('qr_token', $token)
+            ->firstOrFail();
+
+        return view('vehicle.scan', compact('kendaraan'));
+    }
+
 
     /**
      * Authorization: mahasiswa hanya boleh akses kendaraan miliknya.

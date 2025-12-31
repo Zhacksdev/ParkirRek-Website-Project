@@ -5,11 +5,11 @@
 
     <!-- Header -->
     <div class="mb-3">
-        <h1 class="fw-bold">Welcome back, Student!</h1>
+        <h1 class="fw-bold">Welcome back, {{ $studentName }}!</h1>
         <p class="text-muted fs-5 mb-0">Ready to go through your day?</p>
     </div>
 
-    <!-- Stats Cards (2 cards = 2 kolom, ga ada slot kosong) -->
+    <!-- Stats Cards -->
     <div class="row g-3 mb-3">
         <div class="col-12 col-md-6">
             <div class="card stat-card h-100">
@@ -20,7 +20,7 @@
                         </div>
                         <h6 class="mb-0 fw-semibold">Total Vehicle</h6>
                     </div>
-                    <h2 class="fw-bold mb-0">1</h2>
+                    <h2 class="fw-bold mb-0">{{ $totalVehicles }}</h2>
                 </div>
             </div>
         </div>
@@ -34,33 +34,15 @@
                         </div>
                         <h6 class="mb-0 fw-semibold">Violations</h6>
                     </div>
-                    <h2 class="fw-bold mb-0">4</h2>
+                    <h2 class="fw-bold mb-0">{{ $totalViolations }}</h2>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Bottom Section (Timestamp + Add Vehicle) -->
+    <!-- Add Vehicle (full width, timestamp dihapus) -->
     <div class="row g-3 mt-1 mb-2">
-        <div class="col-12 col-lg-6">
-            <div class="dash-mini-card timestamp-card h-100">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                        <h6 class="fw-bold mb-1">Timestamp</h6>
-                        <small class="text-muted">In - Out : 13:00 - 16:34</small>
-                    </div>
-                    <i class="bi bi-clock text-maroon"></i>
-                </div>
-
-                <div class="mt-4">
-                    <a href="/timestamp" class="btn btn-maroon w-100 btn-mini">
-                        See Details <i class="bi bi-chevron-right ms-1"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-12 col-lg-6">
+        <div class="col-12">
             <div class="dash-mini-card addvehicle-card h-100">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
@@ -71,7 +53,7 @@
                 </div>
 
                 <div class="mt-4">
-                    <a href="/vehicles/create" class="btn btn-outline-maroon w-100 btn-mini">
+                    <a href="{{ route('student.vehicles.create') }}" class="btn btn-outline-maroon w-100 btn-mini">
                         <i class="bi bi-plus-circle me-1"></i> Add Vehicle
                     </a>
                 </div>
@@ -79,90 +61,67 @@
         </div>
     </div>
 
-    <!-- Your Logbook -->
-    <div class="logbook-panel mb-4">
+    <!-- Your Logbook (TAB per kendaraan) -->
+    <div class="logbook-panel mb-4 mt-5">
         <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
             <h4 class="fw-bold mb-0">Your Logbook</h4>
-
-            <div class="logbook-search">
-                <input type="text" class="form-control" placeholder="Searching for something specific?">
-            </div>
         </div>
 
-        <!-- Today -->
-        <div class="logbook-day">
-            <div class="logbook-day-title">
-                Today <span class="text-maroon">12 December 2025</span>
-            </div>
+        @if (count($logbookTabs) === 0)
+            <div class="text-muted">Kamu belum punya kendaraan. Tambah kendaraan dulu ya.</div>
+        @else
+            <!-- Tabs -->
+            <ul class="nav nav-tabs mb-3" role="tablist">
+                @foreach ($logbookTabs as $idx => $tab)
+                    <li class="nav-item" role="presentation">
+                        <button
+                            class="nav-link {{ $idx === 0 ? 'active' : '' }}"
+                            data-bs-toggle="tab"
+                            data-bs-target="#tab-vehicle-{{ $tab['kendaraan']->id }}"
+                            type="button"
+                            role="tab"
+                        >
+                            {{ $tab['kendaraan']->plat_no }}
+                        </button>
+                    </li>
+                @endforeach
+            </ul>
 
-            <div class="logbook-item">
-                <span class="time-pill">13:03</span>
-                <span class="logbook-text">Parking In</span>
-                <span class="status-dot dot-blue"></span>
-            </div>
+            <!-- Tab content -->
+            <div class="tab-content">
+                @foreach ($logbookTabs as $idx => $tab)
+                    @php($kendaraan = $tab['kendaraan'])
+                    @php($grouped = $tab['grouped'])
 
-            <div class="logbook-item">
-                <span class="time-pill">16:34</span>
-                <span class="logbook-text">Parking Out</span>
-                <span class="status-dot dot-green"></span>
-            </div>
-        </div>
+                    <div
+                        class="tab-pane fade {{ $idx === 0 ? 'show active' : '' }}"
+                        id="tab-vehicle-{{ $kendaraan->id }}"
+                        role="tabpanel"
+                    >
+                        @forelse($grouped as $dayLabel => $items)
+                            <div class="logbook-day">
+                                <div class="logbook-day-title">
+                                    {{ $dayLabel }}
+                                    <span class="text-maroon">
+                                        {{ \Carbon\Carbon::parse($items->first()['time'])->format('d F Y') }}
+                                    </span>
+                                </div>
 
-        <!-- Yesterday -->
-        <div class="logbook-day">
-            <div class="logbook-day-title">
-                Yesterday <span class="text-maroon">11 December 2025</span>
+                                @foreach ($items as $item)
+                                    <div class="logbook-item">
+                                        <span class="time-pill">{{ \Carbon\Carbon::parse($item['time'])->format('H:i') }}</span>
+                                        <span class="logbook-text">{{ $item['text'] }}</span>
+                                        <span class="status-dot {{ $item['dot'] }}"></span>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @empty
+                            <div class="text-muted">Belum ada aktivitas untuk kendaraan ini.</div>
+                        @endforelse
+                    </div>
+                @endforeach
             </div>
-
-            <div class="logbook-item">
-                <span class="time-pill">15:32</span>
-                <span class="logbook-text">Parking In</span>
-                <span class="status-dot dot-blue"></span>
-            </div>
-
-            <div class="logbook-item">
-                <span class="time-pill">16:06</span>
-                <span class="logbook-text">Violations Reported</span>
-                <span class="status-dot dot-red"></span>
-            </div>
-
-            <div class="logbook-item">
-                <span class="time-pill">18:29</span>
-                <span class="logbook-text">Parking Out</span>
-                <span class="status-dot dot-green"></span>
-            </div>
-        </div>
-
-        <!-- Monday -->
-        <div class="logbook-day">
-            <div class="logbook-day-title">
-                Monday <span class="text-maroon">8 December 2025</span>
-            </div>
-
-            <div class="logbook-item">
-                <span class="time-pill">08:43</span>
-                <span class="logbook-text">Registered New Vehicle</span>
-                <span class="status-dot dot-orange"></span>
-            </div>
-
-            <div class="logbook-item">
-                <span class="time-pill">09:47</span>
-                <span class="logbook-text">Registering In Progress of Verification</span>
-                <span class="status-dot dot-orange"></span>
-            </div>
-
-            <div class="logbook-item">
-                <span class="time-pill">10:03</span>
-                <span class="logbook-text">Register Approved</span>
-                <span class="status-dot dot-orange"></span>
-            </div>
-
-            <div class="logbook-item">
-                <span class="time-pill">10:03</span>
-                <span class="logbook-text">Register Completed! (B 1234 XYZ)</span>
-                <span class="status-dot dot-orange"></span>
-            </div>
-        </div>
+        @endif
     </div>
 
 </div>

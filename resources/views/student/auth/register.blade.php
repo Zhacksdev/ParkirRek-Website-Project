@@ -4,7 +4,7 @@
 <div class="auth-bg">
     <!-- Top Right Nav -->
     <div class="auth-topnav">
-        <a href="/" class="auth-toplink">Home</a>
+        <a href="{{ route('student.dashboard') }}" class="auth-toplink">Home</a>
         <a href="#" class="auth-toplink">Features</a>
     </div>
 

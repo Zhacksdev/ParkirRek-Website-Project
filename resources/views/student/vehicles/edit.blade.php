@@ -3,7 +3,7 @@
 @section('content')
 <div class="container-fluid px-5 pt-3">
     <div class="row justify-content-center">
-        <div class="col-lg-6 col-xl-5">
+        <div class="col-12 col-lg-6 col-xl-5">
 
             <div class="vehicle-form-card">
                 <div class="d-flex align-items-center justify-content-between mb-3">
@@ -14,88 +14,233 @@
                     <i class="bi bi-pencil-square text-maroon"></i>
                 </div>
 
-                <form>
+                {{-- Server-side errors --}}
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <div class="fw-semibold mb-1">Please fix the following:</div>
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                                <li class="small">{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <form
+                    id="vehicleEditForm"
+                    method="POST"
+                    action="{{ route('student.vehicles.update', $kendaraan->id) }}"
+                    enctype="multipart/form-data"
+                >
+                    @csrf
+                    @method('PUT')
+
                     <!-- License Plate -->
                     <div class="mb-3">
                         <label class="form-label small text-muted">License plate number</label>
-                        <input type="text" class="form-control form-soft" value="B 1234 XYZ">
+                        <input
+                            type="text"
+                            name="plat_no"
+                            value="{{ old('plat_no', $kendaraan->plat_no) }}"
+                            class="form-control form-soft @error('plat_no') is-invalid @enderror"
+                        >
+                        @error('plat_no')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <!-- Vehicle Type -->
                     <div class="mb-3">
                         <label class="form-label small text-muted">Vehicle Type</label>
-                        <select class="form-select form-soft">
-                            <option selected>Car</option>
-                            <option>Motorcycle</option>
+                        <select
+                            name="jenis_kendaraan"
+                            class="form-select form-soft @error('jenis_kendaraan') is-invalid @enderror"
+                        >
+                            <option value="mobil" {{ old('jenis_kendaraan', $kendaraan->jenis_kendaraan) === 'mobil' ? 'selected' : '' }}>
+                                Car
+                            </option>
+                            <option value="motor" {{ old('jenis_kendaraan', $kendaraan->jenis_kendaraan) === 'motor' ? 'selected' : '' }}>
+                                Motorcycle
+                            </option>
                         </select>
+                        @error('jenis_kendaraan')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
-                    <!-- Brand & Model -->
+                    <!-- STNK Number -->
                     <div class="mb-3">
-                        <label class="form-label small text-muted">Brand & Model</label>
-                        <input type="text" class="form-control form-soft" value="Toyota Avanza 2022">
+                        <label class="form-label small text-muted">STNK Number</label>
+                        <input
+                            type="text"
+                            name="stnk_number"
+                            value="{{ old('stnk_number', $kendaraan->stnk_number) }}"
+                            class="form-control form-soft @error('stnk_number') is-invalid @enderror"
+                        >
+                        @error('stnk_number')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
-                    <!-- STNK Photo -->
+                    <!-- STNK Photo (Drag & Drop + Preview) -->
                     <div class="mb-3">
-                        <label class="form-label small text-muted d-flex justify-content-between align-items-center">
-                            <span>STNK Photo</span>
-                            <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3">
-                                Verified
-                            </span>
-                        </label>
+                        <label class="form-label small text-muted">STNK Photo</label>
 
-                        <label class="upload-box">
-                            <input type="file" hidden>
-                            <div class="upload-inner">
-                                <i class="bi bi-upload upload-icon"></i>
-                                <div class="upload-text">Replace STNK photo (optional)</div>
-                                <div class="upload-subtext">PNG, JPG up to 5MB</div>
+                        <div
+                            id="stnkDropzone"
+                            class="border border-2 rounded-4 p-4 text-center bg-light"
+                            style="border-style:dashed;"
+                            role="button"
+                            tabindex="0"
+                        >
+                            <div class="mb-2">
+                                <i class="bi bi-cloud-arrow-up fs-2 text-maroon"></i>
                             </div>
-                        </label>
+                            <div class="fw-semibold">Drag & drop file here</div>
+                            <div class="text-muted small">or click to replace (JPG/PNG, max 5MB)</div>
 
-                        <div class="text-muted small mt-2">
-                            Current file: <span class="fw-semibold">stnk_b1234xyz.jpg</span>
+                            <input
+                                id="stnk_photo"
+                                type="file"
+                                name="stnk_photo"
+                                accept="image/png,image/jpeg"
+                                class="d-none"
+                            >
                         </div>
-                    </div>
 
-                    <!-- Vehicle Photo -->
-                    <div class="mb-3">
-                        <label class="form-label small text-muted">Vehicle Photo</label>
+                        <!-- Client error -->
+                        <div id="stnkClientError" class="alert alert-danger py-2 px-3 mt-3 d-none mb-0">
+                            <small id="stnkClientErrorText"></small>
+                        </div>
 
-                        <label class="upload-box">
-                            <input type="file" hidden>
-                            <div class="upload-inner">
-                                <i class="bi bi-upload upload-icon"></i>
-                                <div class="upload-text">Replace vehicle photo (optional)</div>
-                                <div class="upload-subtext">PNG, JPG up to 5MB</div>
+                        <!-- Preview -->
+                        <div id="stnkPreviewWrap" class="mt-3">
+                            <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
+                                <div class="small text-muted">
+                                    <span id="stnkFileLabel">
+                                        Current file:
+                                        <span class="fw-semibold">
+                                            {{ $kendaraan->stnk_photo_path ? basename($kendaraan->stnk_photo_path) : '-' }}
+                                        </span>
+                                    </span>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    class="btn btn-sm btn-outline-danger d-none"
+                                    id="stnkRemoveBtn"
+                                >
+                                    <i class="bi bi-x-circle me-1"></i> Remove
+                                </button>
                             </div>
-                        </label>
 
-                        <div class="text-muted small mt-2">
-                            Current file: <span class="fw-semibold">car_b1234xyz.jpg</span>
+                            <div class="ratio ratio-16x9 rounded-4 overflow-hidden border bg-white">
+                                @if ($kendaraan->stnk_photo_path)
+                                    <img
+                                        id="stnkPreviewImg"
+                                        src="{{ asset('storage/'.$kendaraan->stnk_photo_path) }}"
+                                        class="w-100 h-100"
+                                        style="object-fit:cover;"
+                                    >
+                                @else
+                                    <img id="stnkPreviewImg" src="" class="d-none">
+                                @endif
+                            </div>
                         </div>
+
+                        @error('stnk_photo')
+                            <div class="text-danger small mt-2">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <!-- Note -->
-                    <div class="note-box mb-4">
-                        <strong>Note:</strong> Changes may require re-verification by admin.
-                        Make sure the info matches your STNK.
+                    <div class="alert alert-warning small mb-3">
+                        <strong>Note:</strong> Updating STNK photo may require re-verification by admin.
                     </div>
 
                     <!-- Actions -->
-                    <div class="d-flex gap-2">
-                        <a href="/vehicles" class="btn btn-outline-maroon w-100">
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-maroon w-100">
+                            <i class="bi bi-save me-1"></i> Save Changes
+                        </button>
+
+                        <a href="{{ route('student.vehicles.index') }}" class="btn btn-outline-secondary w-100">
                             Cancel
                         </a>
-                        <a href="/vehicles" class="btn btn-maroon w-100">
-                            Save Changes
-                        </a>
                     </div>
+
                 </form>
             </div>
 
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const dropzone = document.getElementById('stnkDropzone');
+    const input = document.getElementById('stnk_photo');
+    const errBox = document.getElementById('stnkClientError');
+    const errText = document.getElementById('stnkClientErrorText');
+    const imgEl = document.getElementById('stnkPreviewImg');
+    const removeBtn = document.getElementById('stnkRemoveBtn');
+
+    const MAX_BYTES = 5 * 1024 * 1024;
+    const ALLOWED = ['image/jpeg', 'image/png'];
+
+    function showError(msg){
+        errText.textContent = msg;
+        errBox.classList.remove('d-none');
+    }
+
+    function clearError(){
+        errBox.classList.add('d-none');
+        errText.textContent = '';
+    }
+
+    function setFile(file){
+        clearError();
+
+        if (!ALLOWED.includes(file.type)) {
+            showError('File must be JPG or PNG');
+            return;
+        }
+
+        if (file.size > MAX_BYTES) {
+            showError('File too large. Max 5MB');
+            return;
+        }
+
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        input.files = dt.files;
+
+        const url = URL.createObjectURL(file);
+        imgEl.src = url;
+        imgEl.classList.remove('d-none');
+        removeBtn.classList.remove('d-none');
+
+        imgEl.onload = () => URL.revokeObjectURL(url);
+    }
+
+    dropzone.addEventListener('click', () => input.click());
+
+    input.addEventListener('change', () => {
+        if (input.files[0]) setFile(input.files[0]);
+    });
+
+    dropzone.addEventListener('dragover', e => e.preventDefault());
+    dropzone.addEventListener('drop', e => {
+        e.preventDefault();
+        if (e.dataTransfer.files[0]) setFile(e.dataTransfer.files[0]);
+    });
+
+    removeBtn.addEventListener('click', () => {
+        input.value = '';
+        imgEl.src = '';
+        imgEl.classList.add('d-none');
+        removeBtn.classList.add('d-none');
+    });
+});
+</script>
 @endsection
