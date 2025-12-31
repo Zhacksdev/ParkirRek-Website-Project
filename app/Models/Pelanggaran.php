@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Pelanggaran extends Model
 {
     use HasFactory;
 
-    protected $table = 'pelanggarans'; // pastikan nama tabel kamu ini
+    protected $table = 'pelanggarans';
 
     protected $fillable = [
         'kendaraan_id',
@@ -33,7 +33,6 @@ class Pelanggaran extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    // OPTIONAL: URL siap pakai untuk foto bukti
     public function getPhotoUrlAttribute(): ?string
     {
         return $this->photo_path ? asset('storage/' . $this->photo_path) : null;

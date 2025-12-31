@@ -3,58 +3,51 @@
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Str;
 
 class StoreViolationRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        $user = $this->user();
-        if (!$user) return false;
-
-        // Tanpa package: asumsi users.role = 'admin'
-        return ($user->role ?? null) === 'admin';
+        // sudah dilindungi middleware role:admin
+        return true;
     }
 
     public function rules(): array
     {
         return [
-            'plat_no'          => ['required', 'string', 'max:20'],
-            'jenis_pelanggaran'=> ['required', 'string', 'max:100'],
-            'deskripsi'        => ['nullable', 'string', 'max:1000'],
-            'denda'            => ['nullable', 'numeric', 'min:0'],
-            'foto'             => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'], // 4MB
+            // dipilih dari dropdown kendaraan
+            'kendaraan_id' => ['required', 'integer', 'exists:kendaraans,id'],
+
+            // input admin
+            'jenis_pelanggaran' => ['required', 'string', 'max:100'],
+            'deskripsi'         => ['nullable', 'string'],
+            'denda'             => ['nullable', 'integer', 'min:0'],
+
+            // foto bukti
+            'foto' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png,webp',
+                'max:3072', // 3MB
+            ],
         ];
     }
 
     public function messages(): array
     {
         return [
-            'plat_no.required' => 'Plat nomor wajib diisi.',
+            'kendaraan_id.required' => 'Kendaraan wajib dipilih.',
+            'kendaraan_id.exists'   => 'Kendaraan tidak valid.',
+
             'jenis_pelanggaran.required' => 'Jenis pelanggaran wajib diisi.',
-            'foto.required'    => 'Foto pelanggaran wajib diupload.',
-            'foto.image'       => 'File foto harus berupa gambar.',
+            'jenis_pelanggaran.max'      => 'Jenis pelanggaran maksimal 100 karakter.',
+
+            'denda.integer' => 'Denda harus berupa angka.',
+            'denda.min'     => 'Denda tidak boleh negatif.',
+
+            'foto.image' => 'File bukti harus berupa gambar.',
+            'foto.mimes' => 'Format foto harus jpg, jpeg, png, atau webp.',
+            'foto.max'   => 'Ukuran foto maksimal 3MB.',
         ];
-    }
-
-    protected function prepareForValidation(): void
-    {
-        if ($this->has('plat_no')) {
-            $this->merge([
-                'plat_no' => Str::upper(trim((string) $this->input('plat_no'))),
-            ]);
-        }
-
-        if ($this->has('jenis_pelanggaran')) {
-            $this->merge([
-                'jenis_pelanggaran' => trim((string) $this->input('jenis_pelanggaran')),
-            ]);
-        }
-
-        if ($this->has('deskripsi')) {
-            $this->merge([
-                'deskripsi' => trim((string) $this->input('deskripsi')),
-            ]);
-        }
     }
 }

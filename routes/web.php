@@ -40,45 +40,44 @@ use App\Http\Controllers\InternalApi\Mahasiswa\ViolationController as MahasiswaV
 | LANDING
 |--------------------------------------------------------------------------
 */
-Route::get('/', fn() => view('landing.index'))->name('landing');
+Route::get('/', fn () => view('landing.index'))->name('landing');
 
 /*
 |--------------------------------------------------------------------------
 | PUBLIC: QR SCAN (NO AUTH)
 |--------------------------------------------------------------------------
-| QR berisi URL /v/{token} -> buka detail kendaraan untuk petugas/gate
 */
 Route::get('/v/{token}', [StudentKendaraanController::class, 'scan'])
     ->name('vehicle.scan');
 
 /*
 |--------------------------------------------------------------------------
-| AUTH PAGES (FE routes) - guest only
+| AUTH PAGES (guest only)
 |--------------------------------------------------------------------------
 */
 Route::middleware('guest')->group(function () {
 
-    // STUDENT AUTH VIEWS
+    // Student auth pages
     Route::prefix('student')->name('student.')->group(function () {
-        Route::get('/login', fn() => view('student.auth.login'))->name('auth.login');
-        Route::get('/register', fn() => view('student.auth.register'))->name('auth.register');
-        Route::get('/forgot-password', fn() => view('student.auth.forgot-password'))->name('auth.password.request');
-        Route::get('/verify-code', fn() => view('student.auth.verify-code'))->name('auth.verify.code');
+        Route::get('/login', fn () => view('student.auth.login'))->name('auth.login');
+        Route::get('/register', fn () => view('student.auth.register'))->name('auth.register');
+        Route::get('/forgot-password', fn () => view('student.auth.forgot-password'))->name('auth.password.request');
+        Route::get('/verify-code', fn () => view('student.auth.verify-code'))->name('auth.verify.code');
     });
 
-    // ADMIN AUTH VIEWS
+    // Admin auth pages
     Route::prefix('admin')->name('admin.')->group(function () {
-        Route::get('/login', fn() => view('admin.auth.login'))->name('auth.login');
-        Route::get('/register', fn() => view('admin.auth.register'))->name('auth.register');
+        Route::get('/login', fn () => view('admin.auth.login'))->name('auth.login');
+        Route::get('/register', fn () => view('admin.auth.register'))->name('auth.register');
     });
 
-    // Default Laravel auth redirect needs route('login')
-    Route::get('/login', fn() => redirect()->route('student.auth.login'))->name('login');
+    // Default Laravel route('login')
+    Route::get('/login', fn () => redirect()->route('student.auth.login'))->name('login');
 });
 
 /*
 |--------------------------------------------------------------------------
-| AUTH ACTIONS (BE)
+| AUTH ACTIONS (session)
 |--------------------------------------------------------------------------
 */
 Route::post('/login', [LoginController::class, 'login'])->name('login.attempt');
@@ -86,45 +85,50 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 /*
 |--------------------------------------------------------------------------
-| ADMIN WEB (BE) - protected
+| ADMIN WEB - protected
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'role:admin'])
-    ->prefix('admin')
+Route::prefix('admin')
     ->name('admin.')
+    ->middleware(['auth', 'role:admin'])
     ->group(function () {
 
-        Route::get('/dashboard', [AdminDashboardController::class, 'index'])
-            ->name('dashboard.index');
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-        Route::get('/scan', [AdminScanController::class, 'index'])->name('scan.index');
+        Route::get('/scan', [AdminScanController::class, 'index'])->name('scan');
         Route::post('/scan/masuk', [AdminScanController::class, 'scanMasuk'])->name('scan.masuk');
         Route::post('/scan/keluar', [AdminScanController::class, 'scanKeluar'])->name('scan.keluar');
 
-        Route::get('/scan-logs', [AdminScanLogController::class, 'index'])->name('scan_logs.index');
+        // ✅ Entry/Exit Logs (SATU route saja, jangan duplikat)
+        Route::get('/vehicle-logs', [AdminScanLogController::class, 'index'])->name('vehicle_logs');
 
-        Route::get('/violations', [AdminViolationController::class, 'index'])->name('violations.index');
-        Route::get('/violations/create', [AdminViolationController::class, 'create'])->name('violations.create');
+        // (kalau kamu masih butuh alias lama /scan-logs, bisa redirect)
+        Route::get('/scan-logs', fn () => redirect()->route('admin.vehicle_logs'))->name('scan_logs');
+
+        // Violations
+        Route::get('/violations', [AdminViolationController::class, 'index'])->name('violations');
         Route::post('/violations', [AdminViolationController::class, 'store'])->name('violations.store');
-        Route::patch('/violations/{pelanggaran}/status', [AdminViolationController::class, 'updateStatus'])
-            ->name('violations.status');
+        Route::patch('/violations/{pelanggaran}/status', [AdminViolationController::class, 'updateStatus'])->name('violations.status');
+
+        // Optional statistics
+        Route::get('/statistics', fn () => redirect()->route('admin.dashboard'))->name('statistics');
+
+        // Optional locations
+        Route::get('/locations', fn () => view('admin.locations'))->name('locations');
     });
 
 /*
 |--------------------------------------------------------------------------
-| STUDENT WEB (BE) - protected
+| STUDENT WEB - protected
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'role:student'])
-    ->prefix('student')
+Route::prefix('student')
     ->name('student.')
+    ->middleware(['auth', 'role:student'])
     ->group(function () {
 
-        // DASHBOARD (satu saja)
-        Route::get('/dashboard', [StudentDashboardController::class, 'index'])
-            ->name('dashboard');
+        Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('dashboard');
 
-        // VEHICLES (controller-driven, no duplicates)
         Route::get('/vehicles', [StudentKendaraanController::class, 'index'])->name('vehicles.index');
         Route::get('/vehicles/create', [StudentKendaraanController::class, 'create'])->name('vehicles.create');
         Route::post('/vehicles', [StudentKendaraanController::class, 'store'])->name('vehicles.store');
@@ -133,25 +137,17 @@ Route::middleware(['auth', 'role:student'])
         Route::put('/vehicles/{kendaraan}', [StudentKendaraanController::class, 'update'])->name('vehicles.update');
         Route::delete('/vehicles/{kendaraan}', [StudentKendaraanController::class, 'destroy'])->name('vehicles.destroy');
 
-        // QR image (student only)
-        Route::get('/vehicles/{kendaraan}/qr', [StudentKendaraanController::class, 'qr'])
-            ->name('vehicles.qr');
+        Route::get('/vehicles/{kendaraan}/qr', [StudentKendaraanController::class, 'qr'])->name('vehicles.qr');
 
-        // VIOLATIONS (satu saja)
-        Route::get('/violations', [StudentViolationController::class, 'index'])
-            ->name('violations.index');
+        Route::get('/violations', [StudentViolationController::class, 'index'])->name('violations.index');
+        Route::get('/scan-logs', [StudentScanLogController::class, 'index'])->name('scan_logs.index');
 
-        // SCAN LOGS
-        Route::get('/scan-logs', [StudentScanLogController::class, 'index'])
-            ->name('scan_logs.index');
-
-        // PROFILE (view static ok)
-        Route::get('/profile', fn() => view('student.profile.index'))->name('profile');
+        Route::get('/profile', fn () => view('student.profile.index'))->name('profile');
     });
 
 /*
 |--------------------------------------------------------------------------
-| INTERNAL API (AJAX) - protected (session cookie)
+| INTERNAL API (AJAX) - protected
 |--------------------------------------------------------------------------
 */
 Route::prefix('internal-api')
@@ -167,7 +163,6 @@ Route::prefix('internal-api')
                 Route::get('/kendaraan/lookup', [AdminKendaraanLookupApiController::class, 'lookup']);
             });
 
-        // NOTE: namespace kamu masih "Mahasiswa" tapi role student -> ini ok kalau controllernya memang begitu
         Route::prefix('mahasiswa')
             ->middleware(['role:student'])
             ->group(function () {

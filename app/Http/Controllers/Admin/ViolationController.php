@@ -6,10 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreViolationRequest;
 use App\Models\Kendaraan;
 use App\Models\Pelanggaran;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -17,70 +17,105 @@ class ViolationController extends Controller
 {
     public function index(Request $request): View
     {
-        $status = $request->query('status'); // optional: OPEN/CLOSED/etc
-        $platNo = $request->query('plat_no'); // optional like
+        $today = Carbon::today();
 
+        $status = strtoupper((string) $request->query('status', '')); // OPEN/CLOSED/''
+        $platNo = (string) $request->query('plat_no', '');
+
+        // ===== Cards =====
+        $activeOpen = Pelanggaran::query()
+            ->where('status', 'OPEN')
+            ->count();
+
+        $unpaidTotal = (int) Pelanggaran::query()
+            ->where('status', 'OPEN')
+            ->sum('denda');
+
+        // kalau tabel kamu punya updated_at, ini aman.
+        // kalau belum pakai timestamps, ganti ke created_at.
+        $resolvedToday = Pelanggaran::query()
+            ->where('status', 'CLOSED')
+            ->whereDate('updated_at', $today)
+            ->count();
+
+        // ===== Table =====
         $query = Pelanggaran::query()
-            ->with(['kendaraan', 'creator'])
+            ->with([
+                'kendaraan.user',  // owner
+                'creator',         // admin pelapor
+            ])
             ->latest();
 
-        if ($status) {
+        if ($status !== '') {
             $query->where('status', $status);
         }
 
-        if ($platNo) {
-            $query->where('plat_no', 'like', '%' . $platNo . '%');
+        if ($platNo !== '') {
+            $query->where('plat_no', 'like', "%{$platNo}%");
         }
 
         $violations = $query->paginate(20)->withQueryString();
 
-        return view('admin.violations.index', compact('violations', 'status', 'platNo'));
-    }
+        // ===== Kendaraan list (untuk dropdown modal) =====
+        // Ambil ringan aja, lalu owner pakai relasi user
+        $kendaraans = Kendaraan::query()
+            ->with(['user:id,nama,email']) // hindari kolom "name"
+            ->orderBy('plat_no')
+            ->get(['id', 'user_id', 'plat_no', 'stnk_number', 'jenis_kendaraan']);
 
-    public function create(): View
-    {
-        return view('admin.violations.create');
+        return view('admin.violations', [
+            'violations' => $violations,
+            'status'     => $status,
+            'platNo'     => $platNo,
+            'cards'      => [
+                'active_open'    => $activeOpen,
+                'unpaid_total'   => $unpaidTotal,
+                'resolved_today' => $resolvedToday,
+            ],
+            'kendaraans' => $kendaraans,
+        ]);
     }
 
     public function store(StoreViolationRequest $request): RedirectResponse
     {
         $data = $request->validated();
-
         $adminId = $request->user()->id;
 
-        // cari kendaraan by plat_no (optional)
+        // kendaraan wajib dipilih dari dropdown
         $kendaraan = Kendaraan::query()
-            ->where('plat_no', $data['plat_no'])
-            ->first();
+            ->with('user')
+            ->findOrFail($data['kendaraan_id']);
 
-        // simpan foto ke storage/app/public/violations
-        $photoPath = $request->file('foto')->store('violations', 'public');
+        $photoPath = null;
+        if ($request->hasFile('foto')) {
+            $photoPath = $request->file('foto')->store('violations', 'public');
+        }
 
         DB::transaction(function () use ($data, $adminId, $kendaraan, $photoPath) {
             Pelanggaran::create([
-                'kendaraan_id'      => $kendaraan?->id,        // nullable
-                'plat_no'           => $data['plat_no'],       // tetap disimpan
+                'kendaraan_id'      => $kendaraan->id,
+                'created_by'        => $adminId,
+
+                // auto dari kendaraan
+                'plat_no'           => strtoupper(trim($kendaraan->plat_no)),
+
+                // input admin
                 'jenis_pelanggaran' => $data['jenis_pelanggaran'],
                 'deskripsi'         => $data['deskripsi'] ?? null,
                 'denda'             => $data['denda'] ?? null,
                 'photo_path'        => $photoPath,
-                'status'            => 'OPEN',                 // default OPEN
-                'created_by'        => $adminId,
+
+                'status'            => 'OPEN',
             ]);
         });
 
         return redirect()
-            ->route('admin.violations.index')
+            ->route('admin.violations')
             ->with('success', 'Pelanggaran berhasil dibuat.');
     }
 
-    /**
-     * PATCH /admin/violations/{pelanggaran}/status
-     * payload: status=OPEN|CLOSED|... (sesuaikan enum kamu)
-     */
     public function updateStatus(Request $request, Pelanggaran $pelanggaran): RedirectResponse
     {
-        // Authorization (opsional karena sudah kena middleware role:admin)
         abort_unless(($request->user()->role ?? null) === 'admin', 403);
 
         $validated = $request->validate([

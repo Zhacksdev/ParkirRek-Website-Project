@@ -3,43 +3,59 @@
 @section('title', 'Violations')
 
 @section('content')
+    @php
+        $cards = $cards ?? [];
+        $activeOpen = $cards['active_open'] ?? 0;
+        $unpaidTotal = $cards['unpaid_total'] ?? 0;
+        $resolvedToday = $cards['resolved_today'] ?? 0;
+
+        $status = $status ?? '';
+        $platNo = $platNo ?? '';
+
+        // dropdown kendaraan (dikirim dari controller)
+        $kendaraans = $kendaraans ?? collect();
+    @endphp
+
     <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
             <h1 class="text-2xl font-bold text-gray-900">Violation Management</h1>
             <p class="text-gray-500 text-sm mt-1">Track parking violations and fines.</p>
         </div>
-        <button onclick="openModal()" class="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium shadow-sm shadow-red-200">
+
+        <button type="button" onclick="openModal()"
+            class="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium shadow-sm shadow-red-200">
             <i data-lucide="triangle-alert" class="w-4 h-4"></i> Report Violation
         </button>
     </div>
 
+    {{-- Cards --}}
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-        <div onclick="showStatDetails('active')" class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center justify-between cursor-pointer hover:shadow-md transition-all hover:border-red-200 group">
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center justify-between">
             <div>
-                <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider group-hover:text-red-600">Active Violations</p>
-                <p class="text-2xl font-bold text-red-600 mt-1">5</p>
+                <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider">Active Violations</p>
+                <p class="text-2xl font-bold text-red-600 mt-1">{{ number_format($activeOpen) }}</p>
             </div>
-            <div class="p-3 bg-red-50 text-red-600 rounded-lg group-hover:bg-red-100">
+            <div class="p-3 bg-red-50 text-red-600 rounded-lg">
                 <i data-lucide="ban" class="w-6 h-6"></i>
             </div>
         </div>
 
-        <div onclick="showStatDetails('unpaid')" class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center justify-between cursor-pointer hover:shadow-md transition-all hover:border-orange-200 group">
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center justify-between">
             <div>
-                <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider group-hover:text-orange-600">Unpaid Fines</p>
-                <p class="text-2xl font-bold text-orange-600 mt-1">Rp 150.000</p>
+                <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider">Unpaid Fines (OPEN)</p>
+                <p class="text-2xl font-bold text-orange-600 mt-1">Rp {{ number_format($unpaidTotal, 0, ',', '.') }}</p>
             </div>
-            <div class="p-3 bg-orange-50 text-orange-600 rounded-lg group-hover:bg-orange-100">
+            <div class="p-3 bg-orange-50 text-orange-600 rounded-lg">
                 <i data-lucide="wallet" class="w-6 h-6"></i>
             </div>
         </div>
 
-        <div onclick="showStatDetails('resolved')" class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center justify-between cursor-pointer hover:shadow-md transition-all hover:border-green-200 group">
+        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center justify-between">
             <div>
-                <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider group-hover:text-green-600">Resolved Today</p>
-                <p class="text-2xl font-bold text-green-600 mt-1">2</p>
+                <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider">Resolved Today</p>
+                <p class="text-2xl font-bold text-green-600 mt-1">{{ number_format($resolvedToday) }}</p>
             </div>
-            <div class="p-3 bg-green-50 text-green-600 rounded-lg group-hover:bg-green-100">
+            <div class="p-3 bg-green-50 text-green-600 rounded-lg">
                 <i data-lucide="check-check" class="w-6 h-6"></i>
             </div>
         </div>
@@ -47,239 +63,279 @@
 
     <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
 
-        <div class="p-4 border-b border-gray-200 bg-gray-50 flex flex-col lg:flex-row gap-4 justify-between items-center">
+        {{-- Filters (server-side) --}}
+        <form method="GET"
+            class="p-4 border-b border-gray-200 bg-gray-50 flex flex-col lg:flex-row gap-4 justify-between items-center">
             <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
                 <div class="relative w-full sm:w-64">
                     <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
-                    <input type="text" id="tableSearch" placeholder="Search Plate No..." class="w-full pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-red-200 outline-none transition-all">
+                    <input type="text" name="plat_no" value="{{ $platNo }}" placeholder="Search Plate No..."
+                        class="w-full pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-red-200 outline-none transition-all uppercase">
                 </div>
-            </div>
 
-            <div class="flex gap-2 w-full lg:w-auto">
-                <select id="filterStatus" onchange="filterTable()" class="bg-white border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2 cursor-pointer">
-                    <option value="">All Status</option>
-                    <option value="Unpaid">Unpaid</option>
-                    <option value="Paid">Paid</option>
+                <select name="status"
+                    class="bg-white border border-gray-300 text-gray-700 text-sm rounded-lg block w-full p-2 cursor-pointer">
+                    <option value="" {{ $status === '' ? 'selected' : '' }}>All Status</option>
+                    <option value="OPEN" {{ strtoupper($status) === 'OPEN' ? 'selected' : '' }}>OPEN (Unpaid)</option>
+                    <option value="CLOSED" {{ strtoupper($status) === 'CLOSED' ? 'selected' : '' }}>CLOSED (Paid)</option>
                 </select>
+
+                <button type="submit"
+                    class="px-4 py-2 bg-gray-900 text-white rounded-lg text-sm font-medium hover:bg-black transition-colors">
+                    Apply
+                </button>
+
+                @if ($platNo || $status)
+                    <a href="{{ url()->current() }}"
+                        class="px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                        Reset
+                    </a>
+                @endif
             </div>
-        </div>
+        </form>
 
         <div class="overflow-x-auto">
             <table class="w-full text-left text-sm text-gray-600">
                 <thead class="bg-white text-xs uppercase font-semibold text-gray-500 border-b border-gray-200">
                     <tr>
                         <th class="px-6 py-4">ID</th>
-                        <th class="px-6 py-4">License Plate</th>
-                        <th class="px-6 py-4">Violation Type</th>
-                        <th class="px-6 py-4">Date</th>
+                        <th class="px-6 py-4">Plate</th>
+                        <th class="px-6 py-4">Owner</th>
+                        <th class="px-6 py-4">STNK</th>
+                        <th class="px-6 py-4">Vehicle Type</th>
+                        <th class="px-6 py-4">Violation</th>
                         <th class="px-6 py-4">Fine</th>
                         <th class="px-6 py-4">Status</th>
                         <th class="px-6 py-4 text-right">Action</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-100" id="violationTableBody">
-                    <tr class="hover:bg-red-50/20 transition-colors group" data-status="Unpaid">
-                        <td class="px-6 py-4 font-mono font-medium text-gray-500">#V-1024</td>
-                        <td class="px-6 py-4 font-bold text-gray-900 group-hover:text-red-600 transition-colors">B 1234 XYZ</td>
-                        <td class="px-6 py-4">Illegal Parking</td>
-                        <td class="px-6 py-4">Oct 24, 10:00 AM</td>
-                        <td class="px-6 py-4 font-medium text-gray-900">Rp 50.000</td>
-                        <td class="px-6 py-4">
-                            <span class="bg-red-100 text-red-700 px-2 py-1 rounded-full text-xs font-semibold border border-red-200">Unpaid</span>
-                        </td>
-                        <td class="px-6 py-4 text-right">
-                            <button onclick="alert('Mark as paid?')" class="text-gray-400 hover:text-green-600 p-2 rounded-lg transition-all" title="Mark Paid">
-                                <i data-lucide="check-square" class="w-4 h-4"></i>
-                            </button>
-                        </td>
-                    </tr>
 
-                    <tr class="hover:bg-gray-50 transition-colors group" data-status="Paid">
-                        <td class="px-6 py-4 font-mono font-medium text-gray-500">#V-1022</td>
-                        <td class="px-6 py-4 font-bold text-gray-900">D 5541 ZZ</td>
-                        <td class="px-6 py-4">No Ticket</td>
-                        <td class="px-6 py-4">Oct 23, 02:30 PM</td>
-                        <td class="px-6 py-4 font-medium text-gray-900">Rp 25.000</td>
-                        <td class="px-6 py-4">
-                            <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-semibold border border-green-200">Paid</span>
-                        </td>
-                        <td class="px-6 py-4 text-right">
-                            <button class="text-gray-300 cursor-not-allowed p-2" disabled>
-                                <i data-lucide="check" class="w-4 h-4"></i>
-                            </button>
-                        </td>
-                    </tr>
+                <tbody class="divide-y divide-gray-100">
+                    @forelse($violations as $v)
+                        @php
+                            $owner =
+                                $v->kendaraan?->user?->nama ??
+                                ($v->kendaraan?->user?->name ?? ($v->kendaraan?->user?->email ?? '-'));
+
+                            $stnk = $v->kendaraan?->stnk_number ?? '-';
+                            $jenis = $v->kendaraan?->jenis_kendaraan ?? '-';
+                            $isOpen = strtoupper($v->status) === 'OPEN';
+                            $fine = $v->denda ? 'Rp ' . number_format($v->denda, 0, ',', '.') : '-';
+                        @endphp
+
+                        <tr class="hover:bg-red-50/20 transition-colors group">
+                            <td class="px-6 py-4 font-mono font-medium text-gray-500">#V-{{ $v->id }}</td>
+                            <td class="px-6 py-4 font-bold text-gray-900 group-hover:text-red-600 transition-colors">
+                                {{ $v->plat_no }}
+                            </td>
+                            <td class="px-6 py-4">{{ $owner }}</td>
+                            <td class="px-6 py-4 font-mono text-xs text-gray-700">{{ $stnk }}</td>
+                            <td class="px-6 py-4">{{ $jenis }}</td>
+                            <td class="px-6 py-4">{{ $v->jenis_pelanggaran }}</td>
+                            <td class="px-6 py-4 font-medium text-gray-900">{{ $fine }}</td>
+                            <td class="px-6 py-4">
+                                @if ($isOpen)
+                                    <span class="bg-red-100 text-red-700 px-2 py-1 rounded-full text-xs font-semibold border border-red-200">OPEN</span>
+                                @else
+                                    <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-semibold border border-green-200">CLOSED</span>
+                                @endif
+                            </td>
+
+                            <td class="px-6 py-4 text-right">
+                                @if ($isOpen)
+                                    <form method="POST" action="{{ route('admin.violations.status', $v->id) }}" class="inline">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="status" value="CLOSED">
+                                        <button type="submit" class="text-gray-400 hover:text-green-600 p-2 rounded-lg transition-all" title="Mark Paid">
+                                            <i data-lucide="check-square" class="w-4 h-4"></i>
+                                        </button>
+                                    </form>
+                                @else
+                                    <button class="text-gray-300 cursor-not-allowed p-2" disabled title="Already closed">
+                                        <i data-lucide="check" class="w-4 h-4"></i>
+                                    </button>
+                                @endif
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="9" class="px-6 py-10 text-center text-gray-500">No violations found.</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
-    </div>
 
-    <div id="violationModal" class="hidden fixed inset-0 bg-gray-900/60 z-50 flex items-center justify-center backdrop-blur-sm transition-opacity">
-        <div class="bg-white rounded-xl shadow-2xl w-[500px] max-w-[95%] transform transition-all scale-100 overflow-hidden m-4">
-            <div class="bg-red-600 px-6 py-4 flex justify-between items-center">
-                <div class="text-white">
-                    <h3 class="text-lg font-bold">Report New Violation</h3>
-                    <p class="text-red-100 text-xs mt-0.5">Issue a fine for rule breaking</p>
-                </div>
-                <button onclick="closeModal()" class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-1.5 rounded-full transition-colors">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-            </div>
-
-            <div class="p-6 space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">License Plate</label>
-                    <input type="text" placeholder="e.g. B 1234 ABC" class="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-red-500 uppercase">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Violation Type</label>
-                    <select class="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-red-500 cursor-pointer">
-                        <option>Illegal Parking</option>
-                        <option>Overnight without Permit</option>
-                        <option>No Ticket / Lost Ticket</option>
-                        <option>Blocking Road</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Fine Amount (Rp)</label>
-                    <input type="number" placeholder="50000" class="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-red-500">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Evidence (Photo)</label>
-                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:bg-gray-50 cursor-pointer transition-colors">
-                        <i data-lucide="camera" class="w-6 h-6 text-gray-400 mx-auto mb-2"></i>
-                        <span class="text-xs text-gray-500">Click to upload photo</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-gray-50 px-6 py-4 flex justify-end gap-3 border-t border-gray-200">
-                <button onclick="closeModal()" class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 text-sm font-medium transition-colors">Cancel</button>
-                <button onclick="submitViolation()" class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium shadow-sm transition-colors">Issue Fine</button>
+        <div class="p-4 border-t border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <span class="text-xs text-gray-500">
+                Showing {{ $violations->count() }} of {{ $violations->total() }} records
+            </span>
+            <div class="text-sm">
+                {{ $violations->links() }}
             </div>
         </div>
     </div>
 
-    <div id="statDetailModal" class="hidden fixed inset-0 bg-gray-900/60 z-50 flex items-center justify-center backdrop-blur-sm transition-opacity">
-        <div class="bg-white rounded-xl shadow-2xl w-[400px] max-w-[95%] transform transition-all scale-100 overflow-hidden m-4">
-            <div class="bg-gray-50 px-6 py-4 flex justify-between items-center border-b border-gray-200">
-                <h3 class="text-lg font-bold text-gray-900" id="statDetailTitle">Detail</h3>
-                <button onclick="closeStatDetailModal()" class="text-gray-400 hover:text-gray-600 bg-white hover:bg-gray-100 p-1.5 rounded-full border border-gray-200 transition-colors">
+    {{-- Modal: Report Violation --}}
+    <div id="violationModal"
+        class="hidden fixed inset-0 bg-gray-900/60 z-50 flex items-center justify-center backdrop-blur-sm transition-opacity">
+        <div class="bg-white rounded-xl shadow-2xl w-[560px] max-w-[95%] overflow-hidden m-4">
+            <div class="bg-red-600 px-6 py-4 flex justify-between items-center">
+                <div class="text-white">
+                    <h3 class="text-lg font-bold">Report New Violation</h3>
+                    <p class="text-red-100 text-xs mt-0.5">Pilih kendaraan, isi pelanggaran, denda, dan foto bukti</p>
+                </div>
+                <button type="button" onclick="closeModal()"
+                    class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-1.5 rounded-full transition-colors">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
-            <div class="p-6" id="statDetailContent">
 
-            </div>
+            <form method="POST" action="{{ route('admin.violations.store') }}" enctype="multipart/form-data">
+                @csrf
+
+                <div class="p-6 space-y-4">
+                    {{-- Kendaraan dropdown --}}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Select Vehicle (Plate)</label>
+
+                        <select name="kendaraan_id" id="kendaraanSelect" required
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-red-500 bg-white">
+                            <option value="">-- Choose plate --</option>
+
+                            @foreach ($kendaraans as $k)
+                                @php
+                                    $ownerName = $k->user?->nama ?? ($k->user?->name ?? ($k->user?->email ?? '-'));
+                                @endphp
+                                <option value="{{ $k->id }}"
+                                    data-plate="{{ strtoupper($k->plat_no) }}"
+                                    data-stnk="{{ $k->stnk_number ?? '-' }}"
+                                    data-owner="{{ $ownerName }}"
+                                    data-jenis="{{ $k->jenis_kendaraan ?? '-' }}">
+                                    {{ strtoupper($k->plat_no) }} — {{ $ownerName }}
+                                </option>
+                            @endforeach
+                        </select>
+
+                        <p class="text-xs text-gray-500 mt-1">
+                            Setelah pilih plate, STNK / Owner / Vehicle Type akan terisi otomatis.
+                        </p>
+
+                        @error('kendaraan_id')
+                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Auto-fill preview --}}
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                            <div class="text-[11px] text-gray-500 uppercase">STNK</div>
+                            <div id="pvStnk" class="text-sm font-semibold text-gray-800">-</div>
+                        </div>
+                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                            <div class="text-[11px] text-gray-500 uppercase">Owner</div>
+                            <div id="pvOwner" class="text-sm font-semibold text-gray-800">-</div>
+                        </div>
+                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                            <div class="text-[11px] text-gray-500 uppercase">Vehicle Type</div>
+                            <div id="pvJenis" class="text-sm font-semibold text-gray-800">-</div>
+                        </div>
+                    </div>
+
+                    {{-- Violation type --}}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Violation Type</label>
+                        <input name="jenis_pelanggaran" type="text" required placeholder="e.g. Illegal Parking"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-red-500">
+
+                        @error('jenis_pelanggaran')
+                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Desc --}}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Description (optional)</label>
+                        <textarea name="deskripsi" rows="3"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-red-500"></textarea>
+                        @error('deskripsi')
+                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Fine --}}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Fine Amount (Rp)</label>
+                        <input name="denda" type="number" min="0" placeholder="50000"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-red-500">
+                        @error('denda')
+                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Photo --}}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Evidence (Photo)</label>
+                        <input name="foto" type="file" accept="image/*"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-red-500 bg-white">
+                        <p class="text-xs text-gray-500 mt-1">jpg/png/webp max 3MB</p>
+                        @error('foto')
+                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 px-6 py-4 flex justify-end gap-3 border-t border-gray-200">
+                    <button type="button" onclick="closeModal()"
+                        class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 text-sm font-medium transition-colors">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                        class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium shadow-sm transition-colors">
+                        Issue Fine
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 @endsection
 
 @push('scripts')
-<script>
-    function openModal() {
-        document.getElementById('violationModal').classList.remove('hidden');
-    }
-    function closeModal() {
-        document.getElementById('violationModal').classList.add('hidden');
-    }
-    function submitViolation() {
-        closeModal();
-        if (typeof window.showToast === 'function') {
-            window.showToast('Violation reported successfully.', 'success');
-        } else {
-            alert('Violation Reported');
+    <script>
+        function openModal() {
+            document.getElementById('violationModal').classList.remove('hidden');
         }
-    }
 
-    function filterTable() {
-        const searchTerm = document.getElementById('tableSearch').value.toLowerCase();
-        const statusValue = document.getElementById('filterStatus').value;
-        const rows = document.querySelectorAll('#violationTableBody tr');
+        function closeModal() {
+            document.getElementById('violationModal').classList.add('hidden');
+        }
 
-        rows.forEach(row => {
-            const text = row.innerText.toLowerCase();
-            const rowStatus = row.getAttribute('data-status');
+        // Autofill preview dari dropdown
+        document.addEventListener('DOMContentLoaded', function () {
+            const select = document.getElementById('kendaraanSelect');
+            const pvStnk = document.getElementById('pvStnk');
+            const pvOwner = document.getElementById('pvOwner');
+            const pvJenis = document.getElementById('pvJenis');
 
-            const matchesSearch = text.includes(searchTerm);
-            const matchesStatus = statusValue === '' || rowStatus === statusValue;
+            if (!select) return;
 
-            if (matchesSearch && matchesStatus) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
+            const fill = () => {
+                const opt = select.options[select.selectedIndex];
+                if (!opt || !opt.value) {
+                    pvStnk.textContent = '-';
+                    pvOwner.textContent = '-';
+                    pvJenis.textContent = '-';
+                    return;
+                }
+
+                pvStnk.textContent = opt.dataset.stnk || '-';
+                pvOwner.textContent = opt.dataset.owner || '-';
+                pvJenis.textContent = opt.dataset.jenis || '-';
+            };
+
+            select.addEventListener('change', fill);
+            fill();
         });
-    }
-
-    function showStatDetails(type) {
-        const modal = document.getElementById('statDetailModal');
-        const title = document.getElementById('statDetailTitle');
-        const content = document.getElementById('statDetailContent');
-
-        modal.classList.remove('hidden');
-
-        if (type === 'active') {
-            title.innerText = 'Active Violations';
-            content.innerHTML = `
-                <div class="space-y-3">
-                    <div class="flex justify-between items-center pb-2 border-b border-gray-100">
-                        <span class="text-sm font-medium text-gray-600">Illegal Parking</span>
-                        <span class="text-sm font-bold text-red-600">3 Cases</span>
-                    </div>
-                    <div class="flex justify-between items-center pb-2 border-b border-gray-100">
-                        <span class="text-sm font-medium text-gray-600">Overnight</span>
-                        <span class="text-sm font-bold text-red-600">2 Cases</span>
-                    </div>
-                    <div class="pt-2 text-xs text-gray-500">
-                        Total 5 active violations requiring attention.
-                    </div>
-                </div>
-            `;
-        } else if (type === 'unpaid') {
-            title.innerText = 'Unpaid Fines Breakdown';
-            content.innerHTML = `
-                <div class="space-y-3">
-                    <div class="flex justify-between items-center pb-2 border-b border-gray-100">
-                        <span class="text-sm font-medium text-gray-600">Cars</span>
-                        <span class="text-sm font-bold text-orange-600">Rp 100.000</span>
-                    </div>
-                    <div class="flex justify-between items-center pb-2 border-b border-gray-100">
-                        <span class="text-sm font-medium text-gray-600">Motorcycles</span>
-                        <span class="text-sm font-bold text-orange-600">Rp 50.000</span>
-                    </div>
-                    <div class="pt-2 text-xs text-gray-500">
-                        Total outstanding: Rp 150.000
-                    </div>
-                </div>
-            `;
-        } else if (type === 'resolved') {
-            title.innerText = 'Resolved Today';
-            content.innerHTML = `
-                <div class="space-y-3">
-                    <div class="flex justify-between items-center pb-2 border-b border-gray-100">
-                        <span class="text-sm font-medium text-gray-600">Paid Fines</span>
-                        <span class="text-sm font-bold text-green-600">1</span>
-                    </div>
-                    <div class="flex justify-between items-center pb-2 border-b border-gray-100">
-                        <span class="text-sm font-medium text-gray-600">Warnings Issued</span>
-                        <span class="text-sm font-bold text-green-600">1</span>
-                    </div>
-                    <div class="pt-2 text-xs text-gray-500">
-                        Good job! 2 cases closed today.
-                    </div>
-                </div>
-            `;
-        }
-    }
-
-    function closeStatDetailModal() {
-        document.getElementById('statDetailModal').classList.add('hidden');
-    }
-
-    document.getElementById('tableSearch').addEventListener('input', filterTable);
-</script>
+    </script>
 @endpush
