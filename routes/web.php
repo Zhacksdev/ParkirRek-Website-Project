@@ -1,8 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+
+use App\Http\Middleware\AutoLogoutOnAuthPages;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,8 +44,7 @@ use App\Http\Controllers\InternalApi\Mahasiswa\ViolationController as MahasiswaV
 | LANDING
 |--------------------------------------------------------------------------
 */
-
-Route::get('/', fn() => view('landing.index'))->name('landing');
+Route::get('/', fn () => view('landing.index'))->name('landing');
 
 /*
 |--------------------------------------------------------------------------
@@ -54,30 +56,34 @@ Route::get('/v/{token}', [StudentKendaraanController::class, 'scan'])
 
 /*
 |--------------------------------------------------------------------------
-| AUTH PAGES (guest only)
+| AUTH PAGES (guest only) + AUTO LOGOUT + NO CACHE (anti 419)
+|--------------------------------------------------------------------------
+| Tujuan:
+| - user masih login pun kalau buka halaman login -> auto logout + CSRF fresh
+| - tidak kena 419 Page Expired karena tab/back cache
 |--------------------------------------------------------------------------
 */
-Route::middleware('guest')->group(function () {
+Route::middleware([AutoLogoutOnAuthPages::class, 'guest'])->group(function () {
 
-    Route::get('/register', [RegisterController::class, 'show'])->name('student.auth.register');
-    Route::post('/register', [RegisterController::class, 'register'])->name('register.attempt');
-
-    // Student auth pages
+    // Student auth pages (VIEW + Register via Controller)
     Route::prefix('student')->name('student.')->group(function () {
-        Route::get('/login', fn() => view('student.auth.login'))->name('auth.login');
-        Route::get('/register', fn() => view('student.auth.register'))->name('auth.register');
-        Route::get('/forgot-password', fn() => view('student.auth.forgot-password'))->name('auth.password.request');
-        Route::get('/verify-code', fn() => view('student.auth.verify-code'))->name('auth.verify.code');
+        Route::get('/login', fn () => view('student.auth.login'))->name('auth.login');
+
+        // ✅ register pakai controller (hapus redundansi view-only register)
+        Route::get('/register', [RegisterController::class, 'show'])->name('auth.register');
+
+        Route::get('/forgot-password', fn () => view('student.auth.forgot-password'))->name('auth.password.request');
+        Route::get('/verify-code', fn () => view('student.auth.verify-code'))->name('auth.verify.code');
     });
 
     // Admin auth pages
     Route::prefix('admin')->name('admin.')->group(function () {
-        Route::get('/login', fn() => view('admin.auth.login'))->name('auth.login');
-        Route::get('/register', fn() => view('admin.auth.register'))->name('auth.register');
+        Route::get('/login', fn () => view('admin.auth.login'))->name('auth.login');
+        Route::get('/register', fn () => view('admin.auth.register'))->name('auth.register');
     });
 
-    // Default Laravel route('login')
-    Route::get('/login', fn() => redirect()->route('student.auth.login'))->name('login');
+    // Default Laravel route('login') -> student login
+    Route::get('/login', fn () => redirect()->route('student.auth.login'))->name('login');
 });
 
 /*
@@ -87,6 +93,9 @@ Route::middleware('guest')->group(function () {
 */
 Route::post('/login', [LoginController::class, 'login'])->name('login.attempt');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+// ✅ register submit (form action="{{ route('register.attempt') }}")
+Route::post('/register', [RegisterController::class, 'register'])->name('register.attempt');
 
 /*
 |--------------------------------------------------------------------------
@@ -104,22 +113,20 @@ Route::prefix('admin')
         Route::post('/scan/masuk', [AdminScanController::class, 'scanMasuk'])->name('scan.masuk');
         Route::post('/scan/keluar', [AdminScanController::class, 'scanKeluar'])->name('scan.keluar');
 
-        // ✅ Entry/Exit Logs (SATU route saja, jangan duplikat)
+        // Entry/Exit Logs
         Route::get('/vehicle-logs', [AdminScanLogController::class, 'index'])->name('vehicle_logs');
 
-        // (kalau kamu masih butuh alias lama /scan-logs, bisa redirect)
-        Route::get('/scan-logs', fn() => redirect()->route('admin.vehicle_logs'))->name('scan_logs');
+        // alias lama
+        Route::get('/scan-logs', fn () => redirect()->route('admin.vehicle_logs'))->name('scan_logs');
 
         // Violations
         Route::get('/violations', [AdminViolationController::class, 'index'])->name('violations');
         Route::post('/violations', [AdminViolationController::class, 'store'])->name('violations.store');
         Route::patch('/violations/{pelanggaran}/status', [AdminViolationController::class, 'updateStatus'])->name('violations.status');
 
-        // Optional statistics
-        Route::get('/statistics', fn() => redirect()->route('admin.dashboard'))->name('statistics');
-
-        // Optional locations
-        Route::get('/locations', fn() => view('admin.locations'))->name('locations');
+        // Optional
+        Route::get('/statistics', fn () => redirect()->route('admin.dashboard'))->name('statistics');
+        Route::get('/locations', fn () => view('admin.locations'))->name('locations');
     });
 
 /*
@@ -147,7 +154,7 @@ Route::prefix('student')
         Route::get('/violations', [StudentViolationController::class, 'index'])->name('violations.index');
         Route::get('/scan-logs', [StudentScanLogController::class, 'index'])->name('scan_logs.index');
 
-        Route::get('/profile', fn() => view('student.profile.index'))->name('profile');
+        Route::get('/profile', fn () => view('student.profile.index'))->name('profile');
     });
 
 /*

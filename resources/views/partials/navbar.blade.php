@@ -1,64 +1,59 @@
 <nav class="navbar navbar-expand-lg bg-white shadow-sm fixed-top">
     <div class="container-fluid">
-        <a class="navbar-brand fw-bold text-maroon" href="/dashboard">
-            <span class="logo-circle">P</span> ParkiRek
+
+        {{-- Brand --}}
+        <a class="navbar-brand fw-bold text-maroon d-flex align-items-center gap-2"
+            href="{{ route('student.dashboard') }}">
+            <span class="logo-circle">P</span>
+            <span>ParkiRek</span>
         </a>
 
-        <div class="collapse navbar-collapse justify-content-center">
-            <ul class="navbar-nav gap-4">
+        {{-- Hamburger (mobile) --}}
+        <button class="navbar-toggler border-0 p-2" type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#studentNavbar"
+            aria-controls="studentNavbar"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        {{-- Menu --}}
+        <div class="collapse navbar-collapse" id="studentNavbar">
+            <ul class="navbar-nav ms-lg-auto align-items-lg-center gap-lg-4 mt-3 mt-lg-0">
+
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('student.dashboard') ? 'active' : '' }}"
+                    <a class="nav-link d-flex align-items-center gap-1
+                        {{ request()->routeIs('student.dashboard') ? 'active fw-semibold' : '' }}"
                         href="{{ route('student.dashboard') }}">
-                        <i class="bi bi-house-door me-1"></i> Dashboard
+                        <i class="bi bi-house-door"></i>
+                        <span>Dashboard</span>
                     </a>
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('student.vehicles.*') ? 'active' : '' }}"
+                    <a class="nav-link d-flex align-items-center gap-1
+                        {{ request()->routeIs('student.vehicles.*') ? 'active fw-semibold' : '' }}"
                         href="{{ route('student.vehicles.index') }}">
-                        <i class="bi bi-car-front me-1"></i> My Vehicles
+                        <i class="bi bi-car-front"></i>
+                        <span>My Vehicles</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('student.violations.*') ? 'active' : '' }}"
+                    <a class="nav-link d-flex align-items-center gap-1
+                        {{ request()->routeIs('student.violations.*') ? 'active fw-semibold' : '' }}"
                         href="{{ route('student.violations.index') }}">
-                        <i class="bi bi-exclamation-triangle me-1"></i> Violations
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-        <div class="dropdown">
-            <button class="btn btn-outline-maroon dropdown-toggle d-flex align-items-center" type="button"
-                data-bs-toggle="dropdown">
-                <div class="avatar-circle me-2">S</div>
-                <span>Jingga</span>
-            </button>
-
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li>
-                    <a class="dropdown-item" href="{{ route('student.profile') }}">
-                        <i class="bi bi-person me-2"></i> Profile
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item" href="#">
-                        <i class="bi bi-gear me-2"></i> Settings
+                        <i class="bi bi-exclamation-triangle"></i>
+                        <span>Violations</span>
                     </a>
                 </li>
 
-                <li>
+                {{-- Divider khusus mobile --}}
+                <li class="nav-item d-lg-none my-2">
                     <hr class="dropdown-divider">
                 </li>
 
-                <li>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="dropdown-item text-danger">
-                            <i class="bi bi-box-arrow-right me-2"></i> Logout
-                        </button>
-                    </form>
-                </li>
             </ul>
         </div>
     </div>

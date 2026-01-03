@@ -10,6 +10,7 @@ class LoginController extends Controller
 {
     public function login(Request $request)
     {
+
         $credentials = $request->validate([
             'email'    => ['required', 'email'],
             'password' => ['required'],
@@ -28,47 +29,44 @@ class LoginController extends Controller
         $user = Auth::user();
         $role = strtolower((string) ($user->role ?? ''));
 
-        // ✅ Wajib ada konteks login_as dari form (admin/student)
+        // ✅ Wajib ada konteks login_as
         $loginAs = strtolower((string) $request->input('login_as', ''));
 
-        // Kalau form belum ngirim login_as, kita coba tebak dari URL login yang dipakai
         if ($loginAs === '') {
-            // contoh: /admin/login atau /student/login
-            $path = $request->path(); // "admin/login" atau "student/login"
-            if (str_starts_with($path, 'admin')) $loginAs = 'admin';
-            if (str_starts_with($path, 'student')) $loginAs = 'student';
+            $this->forceLogout($request);
+            return back()->withErrors([
+                'email' => 'Login context tidak valid. Silakan login lewat halaman Admin/Student.',
+            ])->onlyInput('email');
         }
 
-        // ✅ Block jika role tidak cocok dengan halaman login yang dipakai
+        // ✅ Block jika role tidak cocok dengan halaman login
         if ($loginAs === 'admin' && $role !== 'admin') {
             $this->forceLogout($request);
-
-            return back()->withErrors([
-                'email' => 'Akun ini bukan admin.',
-            ])->onlyInput('email');
+            return back()->withErrors(['email' => 'Akun ini bukan admin.'])->onlyInput('email');
         }
 
         if ($loginAs === 'student' && $role !== 'student') {
             $this->forceLogout($request);
-
-            return back()->withErrors([
-                'email' => 'Akun ini bukan student.',
-            ])->onlyInput('email');
+            return back()->withErrors(['email' => 'Akun ini bukan student.'])->onlyInput('email');
         }
 
-        // ✅ Redirect berdasarkan role user
-        if ($role === 'admin') {
-            return redirect()->route('admin.dashboard');
-        }
-
-        return redirect()->route('student.dashboard');
+        // ✅ Redirect yang aman
+        return redirect()->intended(
+            $role === 'admin'
+                ? route('admin.dashboard')
+                : route('student.dashboard')
+        );
     }
 
     public function logout(Request $request)
     {
+        $role = strtolower((string) (Auth::user()->role ?? ''));
+
         $this->forceLogout($request);
 
-        return redirect()->route('student.auth.login');
+        return $role === 'admin'
+            ? redirect()->route('admin.auth.login')
+            : redirect()->route('student.auth.login');
     }
 
     private function forceLogout(Request $request): void
