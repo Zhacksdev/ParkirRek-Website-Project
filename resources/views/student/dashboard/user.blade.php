@@ -81,8 +81,8 @@
                     </a>
                 </div>
             @else
-                {{-- Tabs --}}
-                <ul class="nav nav-pills dash-tabs mb-3" role="tablist">
+                {{-- ✅ Tabs (rapi, scrollable, no-wrap) --}}
+                <ul class="nav nav-pills dash-tabs dash-tabs--scroll mb-3" role="tablist">
                     @foreach ($logbookTabs as $idx => $tab)
                         <li class="nav-item" role="presentation">
                             <button
@@ -92,8 +92,8 @@
                                 type="button"
                                 role="tab"
                             >
-                                <i class="bi bi-car-front me-1"></i>
-                                {{ $tab['kendaraan']->plat_no }}
+                                <i class="bi bi-car-front"></i>
+                                <span class="plate">{{ $tab['kendaraan']->plat_no }}</span>
                             </button>
                         </li>
                     @endforeach
@@ -144,7 +144,6 @@
     </div>
 </div>
 
-{{-- Minimal CSS --}}
 <style>
     /* Cards */
     .dash-card{
@@ -171,21 +170,6 @@
         color:#111827;
     }
     .dash-link:hover{ color:#9F1421; }
-
-    /* Tabs */
-    .dash-tabs .nav-link{
-        border-radius: 999px;
-        padding: 8px 12px;
-        font-weight: 700;
-        color:#6b7280;
-        background: #f8f9fa;
-        border: 1px solid rgba(0,0,0,.06);
-    }
-    .dash-tabs .nav-link.active{
-        color:#9F1421;
-        background: rgba(159, 20, 33, .10);
-        border-color: rgba(159, 20, 33, .18);
-    }
 
     /* Empty state */
     .empty-state{
@@ -242,6 +226,7 @@
         padding: 4px 8px;
         border-radius: 999px;
         flex: 0 0 auto;
+        white-space: nowrap;
     }
     .log-text{
         flex: 1 1 auto;
@@ -253,15 +238,75 @@
         width:10px; height:10px; border-radius:999px;
         flex: 0 0 auto;
     }
-    /* Sesuaikan class dot kamu: success / danger / etc */
+
+    /* dot mapping (sesuaikan dengan value $item['dot']) */
     .status-dot.success{ background:#22c55e; box-shadow: 0 0 0 4px rgba(34,197,94,.12); }
     .status-dot.danger{ background:#ef4444; box-shadow: 0 0 0 4px rgba(239,68,68,.12); }
     .status-dot.warning{ background:#f59e0b; box-shadow: 0 0 0 4px rgba(245,158,11,.12); }
 
-    /* Mobile spacing */
+    /* ✅ Tabs base */
+    .dash-tabs .nav-link{
+        border-radius: 999px;
+        font-weight: 800;
+        color:#6b7280;
+        background: #f8f9fa;
+        border: 1px solid rgba(0,0,0,.06);
+        transition: .15s ease;
+    }
+    .dash-tabs .nav-link:hover{
+        color:#111827;
+        background:#f1f3f5;
+    }
+    .dash-tabs .nav-link.active{
+        color:#9F1421;
+        background: rgba(159, 20, 33, .10);
+        border-color: rgba(159, 20, 33, .18);
+    }
+
+    /* ✅ Tabs: scrollable, no-wrap, rapi di mobile */
+    .dash-tabs--scroll{
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+        gap: 10px;
+        padding-bottom: 6px; /* ruang untuk scrollbar */
+        -webkit-overflow-scrolling: touch;
+    }
+    .dash-tabs--scroll::-webkit-scrollbar{ height: 6px; }
+    .dash-tabs--scroll::-webkit-scrollbar-thumb{
+        background: rgba(0,0,0,.15);
+        border-radius: 999px;
+    }
+    .dash-tabs--scroll .nav-item{ flex: 0 0 auto; }
+
+    .dash-tabs--scroll .nav-link{
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap;
+        line-height: 1;
+        height: 40px;      /* stabil */
+        padding: 0 12px;   /* compact */
+    }
+
+    .dash-tabs--scroll .nav-link i{
+        font-size: 14px;
+        opacity: .85;
+    }
+    .dash-tabs--scroll .nav-link .plate{
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        letter-spacing: .3px;
+    }
+
+    /* Mobile tuning */
     @media (max-width: 576px){
         .display-6{ font-size: 2rem; }
         .log-day-head{ flex-direction: column; align-items: flex-start; }
+        .dash-tabs--scroll .nav-link{
+            height: 38px;
+            padding: 0 10px;
+            font-size: 13px;
+        }
     }
 </style>
 @endsection

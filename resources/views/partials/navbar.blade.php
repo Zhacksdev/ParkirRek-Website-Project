@@ -3,18 +3,18 @@
 
         {{-- Brand --}}
         <a class="navbar-brand fw-bold text-maroon d-flex align-items-center gap-2"
-            href="{{ route('student.dashboard') }}">
+           href="{{ route('student.dashboard') }}">
             <span class="logo-circle">P</span>
             <span>ParkiRek</span>
         </a>
 
         {{-- Hamburger (mobile) --}}
         <button class="navbar-toggler border-0 p-2" type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#studentNavbar"
-            aria-controls="studentNavbar"
-            aria-expanded="false"
-            aria-label="Toggle navigation">
+                data-bs-toggle="collapse"
+                data-bs-target="#studentNavbar"
+                aria-controls="studentNavbar"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -25,7 +25,7 @@
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center gap-1
                         {{ request()->routeIs('student.dashboard') ? 'active fw-semibold' : '' }}"
-                        href="{{ route('student.dashboard') }}">
+                       href="{{ route('student.dashboard') }}">
                         <i class="bi bi-house-door"></i>
                         <span>Dashboard</span>
                     </a>
@@ -34,7 +34,7 @@
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center gap-1
                         {{ request()->routeIs('student.vehicles.*') ? 'active fw-semibold' : '' }}"
-                        href="{{ route('student.vehicles.index') }}">
+                       href="{{ route('student.vehicles.index') }}">
                         <i class="bi bi-car-front"></i>
                         <span>My Vehicles</span>
                     </a>
@@ -43,7 +43,7 @@
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center gap-1
                         {{ request()->routeIs('student.violations.*') ? 'active fw-semibold' : '' }}"
-                        href="{{ route('student.violations.index') }}">
+                       href="{{ route('student.violations.index') }}">
                         <i class="bi bi-exclamation-triangle"></i>
                         <span>Violations</span>
                     </a>
@@ -52,6 +52,18 @@
                 {{-- Divider khusus mobile --}}
                 <li class="nav-item d-lg-none my-2">
                     <hr class="dropdown-divider">
+                </li>
+
+                {{-- ✅ Logout --}}
+                <li class="nav-item">
+                    <form method="POST" action="{{ route('logout') }}" class="m-0">
+                        @csrf
+                        <button type="submit"
+                                class="nav-link d-flex align-items-center gap-1 text-danger bg-transparent border-0 px-0">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Logout</span>
+                        </button>
+                    </form>
                 </li>
 
             </ul>
