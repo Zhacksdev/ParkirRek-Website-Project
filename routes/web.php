@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,7 +41,8 @@ use App\Http\Controllers\InternalApi\Mahasiswa\ViolationController as MahasiswaV
 | LANDING
 |--------------------------------------------------------------------------
 */
-Route::get('/', fn () => view('landing.index'))->name('landing');
+
+Route::get('/', fn() => view('landing.index'))->name('landing');
 
 /*
 |--------------------------------------------------------------------------
@@ -57,22 +59,25 @@ Route::get('/v/{token}', [StudentKendaraanController::class, 'scan'])
 */
 Route::middleware('guest')->group(function () {
 
+    Route::get('/register', [RegisterController::class, 'show'])->name('student.auth.register');
+    Route::post('/register', [RegisterController::class, 'register'])->name('register.attempt');
+
     // Student auth pages
     Route::prefix('student')->name('student.')->group(function () {
-        Route::get('/login', fn () => view('student.auth.login'))->name('auth.login');
-        Route::get('/register', fn () => view('student.auth.register'))->name('auth.register');
-        Route::get('/forgot-password', fn () => view('student.auth.forgot-password'))->name('auth.password.request');
-        Route::get('/verify-code', fn () => view('student.auth.verify-code'))->name('auth.verify.code');
+        Route::get('/login', fn() => view('student.auth.login'))->name('auth.login');
+        Route::get('/register', fn() => view('student.auth.register'))->name('auth.register');
+        Route::get('/forgot-password', fn() => view('student.auth.forgot-password'))->name('auth.password.request');
+        Route::get('/verify-code', fn() => view('student.auth.verify-code'))->name('auth.verify.code');
     });
 
     // Admin auth pages
     Route::prefix('admin')->name('admin.')->group(function () {
-        Route::get('/login', fn () => view('admin.auth.login'))->name('auth.login');
-        Route::get('/register', fn () => view('admin.auth.register'))->name('auth.register');
+        Route::get('/login', fn() => view('admin.auth.login'))->name('auth.login');
+        Route::get('/register', fn() => view('admin.auth.register'))->name('auth.register');
     });
 
     // Default Laravel route('login')
-    Route::get('/login', fn () => redirect()->route('student.auth.login'))->name('login');
+    Route::get('/login', fn() => redirect()->route('student.auth.login'))->name('login');
 });
 
 /*
@@ -103,7 +108,7 @@ Route::prefix('admin')
         Route::get('/vehicle-logs', [AdminScanLogController::class, 'index'])->name('vehicle_logs');
 
         // (kalau kamu masih butuh alias lama /scan-logs, bisa redirect)
-        Route::get('/scan-logs', fn () => redirect()->route('admin.vehicle_logs'))->name('scan_logs');
+        Route::get('/scan-logs', fn() => redirect()->route('admin.vehicle_logs'))->name('scan_logs');
 
         // Violations
         Route::get('/violations', [AdminViolationController::class, 'index'])->name('violations');
@@ -111,10 +116,10 @@ Route::prefix('admin')
         Route::patch('/violations/{pelanggaran}/status', [AdminViolationController::class, 'updateStatus'])->name('violations.status');
 
         // Optional statistics
-        Route::get('/statistics', fn () => redirect()->route('admin.dashboard'))->name('statistics');
+        Route::get('/statistics', fn() => redirect()->route('admin.dashboard'))->name('statistics');
 
         // Optional locations
-        Route::get('/locations', fn () => view('admin.locations'))->name('locations');
+        Route::get('/locations', fn() => view('admin.locations'))->name('locations');
     });
 
 /*
@@ -142,7 +147,7 @@ Route::prefix('student')
         Route::get('/violations', [StudentViolationController::class, 'index'])->name('violations.index');
         Route::get('/scan-logs', [StudentScanLogController::class, 'index'])->name('scan_logs.index');
 
-        Route::get('/profile', fn () => view('student.profile.index'))->name('profile');
+        Route::get('/profile', fn() => view('student.profile.index'))->name('profile');
     });
 
 /*

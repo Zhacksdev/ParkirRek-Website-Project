@@ -32,7 +32,6 @@
                         data-plat="{{ $kendaraan->plat_no }}"
                         data-stnk="{{ $kendaraan->stnk_number }}"
                         data-qr-image="{{ route('student.vehicles.qr', $kendaraan->id) }}"
-                        data-scan-url="{{ route('vehicle.scan', $kendaraan->qr_token) }}"
                     >
                         <div class="vcard-inner">
 
@@ -138,13 +137,6 @@
                     </div>
                 </div>
 
-                <div class="mt-3">
-                    <div class="text-muted small mb-1">Scan URL (petugas/gate)</div>
-                    <a id="sideScanUrl" href="#" target="_blank" rel="noopener" class="small" style="word-break:break-all;">
-                        —
-                    </a>
-                </div>
-
                 <div class="mt-3 d-grid d-sm-flex gap-2">
                     <button
                         id="btnOpenModal"
@@ -156,16 +148,10 @@
                     >
                         <i class="bi bi-qr-code-scan me-1"></i> Open QR
                     </button>
+                </div>
 
-                    <a
-                        id="btnOpenScan"
-                        class="btn btn-outline-maroon flex-fill disabled"
-                        href="#"
-                        target="_blank"
-                        rel="noopener"
-                    >
-                        <i class="bi bi-box-arrow-up-right me-1"></i> Open Link
-                    </a>
+                <div class="mt-2 text-muted small">
+                    *QR is for gate officer scanning. Scan link is hidden for security.
                 </div>
 
             </div>
@@ -205,14 +191,56 @@
                     </div>
                 </div>
 
-                <div class="mt-3">
-                    <div class="text-muted small mb-1">Scan URL</div>
-                    <a id="qrScanUrl" href="#" class="small" target="_blank" rel="noopener" style="word-break:break-all;">-</a>
+                <div class="mt-3 text-muted small">
+                    *This QR is meant to be scanned by gate officers.
                 </div>
             </div>
 
             <div class="modal-footer border-0">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DELETE MODAL -->
+<div class="modal fade" id="deleteVehicleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius:16px;">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold text-danger">
+                    <i class="bi bi-trash me-2"></i> Delete Vehicle
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body pt-0">
+                <p class="mb-2">Are you sure you want to delete this vehicle?</p>
+                <div class="p-3 rounded-3" style="background:#f8f9fa; border:1px solid #eee;">
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted small">Vehicle</span>
+                        <span class="fw-semibold" id="delVehicleName">—</span>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <span class="text-muted small">Plate</span>
+                        <span class="fw-semibold" id="delVehiclePlate">—</span>
+                    </div>
+                </div>
+                <div class="text-muted small mt-3">
+                    This action cannot be undone.
+                </div>
+            </div>
+
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+
+                <form id="deleteVehicleForm" method="POST" action="#">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash me-1"></i> Delete
+                    </button>
+                </form>
             </div>
         </div>
     </div>
@@ -292,13 +320,6 @@
     display:flex;
     gap:8px;
 }
-.v-status{
-    text-align:right;
-}
-.v-status-label{
-    font-size:.8rem;
-    margin-bottom:6px;
-}
 
 .v-status-mobile{
     margin-top:12px;
@@ -333,7 +354,6 @@
 .side-qrph{
     text-align:center;
 }
-
 .side-info{
     margin-top:14px;
     background:#f8f9fa;
@@ -351,9 +371,7 @@
 .side-row + .side-row{
     border-top: 1px dashed rgba(0,0,0,.08);
 }
-.side-v{
-    text-align:right;
-}
+.side-v{ text-align:right; }
 
 /* Small screens spacing */
 @media (max-width: 576px){
@@ -365,7 +383,6 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-
     const cards = document.querySelectorAll('.js-vehicle');
     const sideQrImg = document.getElementById('sideQrImg');
     const sideQrPlaceholder = document.getElementById('sideQrPlaceholder');
@@ -380,7 +397,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const plat  = el.getAttribute('data-plat') || '';
         const stnk  = el.getAttribute('data-stnk') || '';
         const qrImg = el.getAttribute('data-qr-image') || '';
-        const scan  = el.getAttribute('data-scan-url') || '#';
 
         document.getElementById('sideJenis').textContent = (jenis || '—').toUpperCase();
         document.getElementById('sidePlat').textContent  = plat || '—';
@@ -396,29 +412,11 @@ document.addEventListener('DOMContentLoaded', function () {
             sideQrPlaceholder.style.display = 'block';
         }
 
-        const sideLink = document.getElementById('sideScanUrl');
-        const btnLink = document.getElementById('btnOpenScan');
-
-        if (scan && scan !== '#') {
-            sideLink.href = scan;
-            sideLink.textContent = scan;
-
-            btnLink.href = scan;
-            btnLink.classList.remove('disabled');
-        } else {
-            sideLink.href = '#';
-            sideLink.textContent = '—';
-
-            btnLink.href = '#';
-            btnLink.classList.add('disabled');
-        }
-
         const btnModal = document.getElementById('btnOpenModal');
         btnModal.disabled = !qrImg;
         btnModal._selected = el;
     }
 
-    // Card click/keyboard
     cards.forEach(el => {
         el.addEventListener('click', () => { setActive(el); updateSide(el); });
         el.addEventListener('keydown', (e) => {
@@ -429,13 +427,12 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Auto select first
     if (cards.length > 0) {
         setActive(cards[0]);
         updateSide(cards[0]);
     }
 
-    // Modal fill (use selected)
+    // Modal fill
     const qrModal = document.getElementById('qrVehicleModal');
     if (qrModal) {
         qrModal.addEventListener('show.bs.modal', function (event) {
@@ -446,20 +443,30 @@ document.addEventListener('DOMContentLoaded', function () {
             const plat  = source?.getAttribute('data-plat') || '-';
             const stnk  = source?.getAttribute('data-stnk') || '-';
             const qrImg = source?.getAttribute('data-qr-image') || '';
-            const scan  = source?.getAttribute('data-scan-url') || '#';
 
             document.getElementById('qrJenis').textContent = jenis.toUpperCase();
             document.getElementById('qrPlat').textContent  = plat;
             document.getElementById('qrStnk').textContent  = stnk;
 
             document.getElementById('qrImg').src = qrImg;
-
-            const aEl = document.getElementById('qrScanUrl');
-            aEl.href = scan;
-            aEl.textContent = scan;
         });
     }
 
+    // Delete modal fill
+    const delModal = document.getElementById('deleteVehicleModal');
+    if (delModal) {
+        delModal.addEventListener('show.bs.modal', function (event) {
+            const btn = event.relatedTarget;
+            const name = btn?.getAttribute('data-vehicle-name') || '—';
+            const plate = btn?.getAttribute('data-vehicle-plate') || '—';
+            const action = btn?.getAttribute('data-delete-action') || '#';
+
+            document.getElementById('delVehicleName').textContent = name;
+            document.getElementById('delVehiclePlate').textContent = plate;
+
+            document.getElementById('deleteVehicleForm').setAttribute('action', action);
+        });
+    }
 });
 </script>
 @endsection

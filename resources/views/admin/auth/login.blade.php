@@ -82,15 +82,6 @@
                 Login as Admin
             </button>
 
-            <div class="auth-divider my-3">
-                <span>New Staff Member?</span>
-            </div>
-
-            {{-- ini view register admin kamu sebelumnya route-nya admin.auth.register (bukan admin.register) --}}
-            <a href="{{ route('admin.auth.register') }}" class="btn auth-btn-outline w-100">
-                Register New Admin
-            </a>
-
             <div class="auth-footer text-center mt-4">
                 <small class="text-muted">
                     Not an admin?
