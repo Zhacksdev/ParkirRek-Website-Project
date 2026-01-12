@@ -220,13 +220,6 @@
     </div>
 </div>
 
-{{-- FLOATING CHAT (opsional, kalau kamu pakai) --}}
-<div class="fixed bottom-6 right-6 z-50">
-    <button type="button" onclick="toggleChat()"
-        class="bg-brand-600 hover:bg-brand-700 text-white p-4 rounded-full shadow-lg hover:shadow-brand-500/40 transition-all transform hover:scale-110 active:scale-95 flex items-center justify-center group ring-4 ring-white">
-        <i data-lucide="message-square-plus" class="w-6 h-6 group-hover:rotate-12 transition-transform"></i>
-    </button>
-</div>
 
 <div id="aiChatModal" class="hidden fixed bottom-24 right-6 w-80 md:w-96 bg-white rounded-2xl shadow-2xl border border-gray-100 z-50 overflow-hidden flex flex-col" style="height: 500px;">
     <div class="bg-brand-600 p-4 flex items-center justify-between shrink-0">
