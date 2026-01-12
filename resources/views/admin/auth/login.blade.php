@@ -5,7 +5,6 @@
 
     <div class="auth-topnav">
         <a href="/" class="auth-toplink">Home</a>
-        <a href="#" class="auth-toplink">Help</a>
     </div>
 
     <div class="auth-card">
