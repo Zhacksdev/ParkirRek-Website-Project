@@ -4,7 +4,6 @@
     <div class="auth-bg">
         <div class="auth-topnav">
             <a href="{{ url('/') }}" class="auth-toplink">Home</a>
-            <a href="#" class="auth-toplink">Features</a>
         </div>
 
         <div class="auth-card">

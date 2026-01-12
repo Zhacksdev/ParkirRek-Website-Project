@@ -12,7 +12,6 @@
         $status = $status ?? '';
         $platNo = $platNo ?? '';
 
-        // dropdown kendaraan (dikirim dari controller)
         $kendaraans = $kendaraans ?? collect();
     @endphp
 
@@ -24,7 +23,8 @@
 
         <button type="button" onclick="openModal()"
             class="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium shadow-sm shadow-red-200">
-            <i data-lucide="triangle-alert" class="w-4 h-4"></i> Report Violation
+            <i data-lucide="triangle-alert" class="w-4 h-4"></i>
+            Report Violation
         </button>
     </div>
 
@@ -43,7 +43,9 @@
         <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center justify-between">
             <div>
                 <p class="text-xs text-gray-500 font-semibold uppercase tracking-wider">Unpaid Fines (OPEN)</p>
-                <p class="text-2xl font-bold text-orange-600 mt-1">Rp {{ number_format($unpaidTotal, 0, ',', '.') }}</p>
+                <p class="text-2xl font-bold text-orange-600 mt-1">
+                    Rp {{ number_format($unpaidTotal, 0, ',', '.') }}
+                </p>
             </div>
             <div class="p-3 bg-orange-50 text-orange-600 rounded-lg">
                 <i data-lucide="wallet" class="w-6 h-6"></i>
@@ -62,13 +64,13 @@
     </div>
 
     <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
-
         {{-- Filters (server-side) --}}
         <form method="GET"
             class="p-4 border-b border-gray-200 bg-gray-50 flex flex-col lg:flex-row gap-4 justify-between items-center">
             <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
                 <div class="relative w-full sm:w-64">
-                    <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
+                    <i data-lucide="search"
+                        class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
                     <input type="text" name="plat_no" value="{{ $platNo }}" placeholder="Search Plate No..."
                         class="w-full pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-red-200 outline-none transition-all uppercase">
                 </div>
@@ -125,29 +127,37 @@
 
                         <tr class="hover:bg-red-50/20 transition-colors group">
                             <td class="px-6 py-4 font-mono font-medium text-gray-500">#V-{{ $v->id }}</td>
+
                             <td class="px-6 py-4 font-bold text-gray-900 group-hover:text-red-600 transition-colors">
                                 {{ $v->plat_no }}
                             </td>
+
                             <td class="px-6 py-4">{{ $owner }}</td>
                             <td class="px-6 py-4 font-mono text-xs text-gray-700">{{ $stnk }}</td>
                             <td class="px-6 py-4">{{ $jenis }}</td>
                             <td class="px-6 py-4">{{ $v->jenis_pelanggaran }}</td>
                             <td class="px-6 py-4 font-medium text-gray-900">{{ $fine }}</td>
+
                             <td class="px-6 py-4">
                                 @if ($isOpen)
-                                    <span class="bg-red-100 text-red-700 px-2 py-1 rounded-full text-xs font-semibold border border-red-200">OPEN</span>
+                                    <span
+                                        class="bg-red-100 text-red-700 px-2 py-1 rounded-full text-xs font-semibold border border-red-200">OPEN</span>
                                 @else
-                                    <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-semibold border border-green-200">CLOSED</span>
+                                    <span
+                                        class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-semibold border border-green-200">CLOSED</span>
                                 @endif
                             </td>
 
                             <td class="px-6 py-4 text-right">
                                 @if ($isOpen)
-                                    <form method="POST" action="{{ route('admin.violations.status', $v->id) }}" class="inline">
+                                    <form method="POST" action="{{ route('admin.violations.status', $v->id) }}"
+                                        class="inline">
                                         @csrf
                                         @method('PATCH')
                                         <input type="hidden" name="status" value="CLOSED">
-                                        <button type="submit" class="text-gray-400 hover:text-green-600 p-2 rounded-lg transition-all" title="Mark Paid">
+                                        <button type="submit"
+                                            class="text-gray-400 hover:text-green-600 p-2 rounded-lg transition-all"
+                                            title="Mark Paid">
                                             <i data-lucide="check-square" class="w-4 h-4"></i>
                                         </button>
                                     </form>
@@ -178,141 +188,171 @@
     </div>
 
     {{-- Modal: Report Violation --}}
-    <div id="violationModal"
-        class="hidden fixed inset-0 bg-gray-900/60 z-50 flex items-center justify-center backdrop-blur-sm transition-opacity">
-        <div class="bg-white rounded-xl shadow-2xl w-[560px] max-w-[95%] overflow-hidden m-4">
-            <div class="bg-red-600 px-6 py-4 flex justify-between items-center">
-                <div class="text-white">
-                    <h3 class="text-lg font-bold">Report New Violation</h3>
-                    <p class="text-red-100 text-xs mt-0.5">Pilih kendaraan, isi pelanggaran, denda, dan foto bukti</p>
+    <div id="violationModal" class="hidden fixed inset-0 z-50 bg-gray-900/60 backdrop-blur-sm">
+        {{-- overlay scroll container --}}
+        <div class="min-h-dvh w-full overflow-y-auto p-4 flex items-start sm:items-center justify-center" onclick="onBackdrop(event)">
+            <div class="bg-white rounded-xl shadow-2xl w-full sm:w-[560px] max-w-[95%] overflow-hidden" role="dialog"
+                aria-modal="true" aria-labelledby="violationModalTitle">
+                <div class="max-h-[calc(100dvh-2rem)] flex flex-col">
+                    {{-- header --}}
+                    <div class="bg-red-600 px-6 py-4 flex justify-between items-center shrink-0">
+                        <div class="text-white">
+                            <h3 id="violationModalTitle" class="text-lg font-bold">Report New Violation</h3>
+                            <p class="text-red-100 text-xs mt-0.5">
+                                Pilih kendaraan, isi pelanggaran, denda, dan foto bukti
+                            </p>
+                        </div>
+                        <button type="button" onclick="closeModal()"
+                            class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-1.5 rounded-full transition-colors">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+
+                    <form method="POST" action="{{ route('admin.violations.store') }}" enctype="multipart/form-data"
+                        class="flex flex-col min-h-0">
+                        @csrf
+
+                        {{-- body (scrollable) --}}
+                        <div class="p-6 space-y-4 overflow-y-auto min-h-0">
+                            {{-- Kendaraan dropdown --}}
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Select Vehicle (Plate)</label>
+
+                                <select name="kendaraan_id" id="kendaraanSelect" required
+                                    class="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-red-500 bg-white">
+                                    <option value="">-- Choose plate --</option>
+
+                                    @foreach ($kendaraans as $k)
+                                        @php
+                                            $ownerName = $k->user?->nama ?? ($k->user?->name ?? ($k->user?->email ?? '-'));
+                                        @endphp
+                                        <option value="{{ $k->id }}"
+                                            data-plate="{{ strtoupper($k->plat_no) }}"
+                                            data-stnk="{{ $k->stnk_number ?? '-' }}"
+                                            data-owner="{{ $ownerName }}"
+                                            data-jenis="{{ $k->jenis_kendaraan ?? '-' }}">
+                                            {{ strtoupper($k->plat_no) }} — {{ $ownerName }}
+                                        </option>
+                                    @endforeach
+                                </select>
+
+                                <p class="text-xs text-gray-500 mt-1">
+                                    Setelah pilih plate, STNK / Owner / Vehicle Type akan terisi otomatis.
+                                </p>
+
+                                @error('kendaraan_id')
+                                    <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            {{-- Auto-fill preview --}}
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                                    <div class="text-[11px] text-gray-500 uppercase">STNK</div>
+                                    <div id="pvStnk" class="text-sm font-semibold text-gray-800">-</div>
+                                </div>
+                                <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                                    <div class="text-[11px] text-gray-500 uppercase">Owner</div>
+                                    <div id="pvOwner" class="text-sm font-semibold text-gray-800">-</div>
+                                </div>
+                                <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                                    <div class="text-[11px] text-gray-500 uppercase">Vehicle Type</div>
+                                    <div id="pvJenis" class="text-sm font-semibold text-gray-800">-</div>
+                                </div>
+                            </div>
+
+                            {{-- Violation type --}}
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Violation Type</label>
+                                <input name="jenis_pelanggaran" type="text" required placeholder="e.g. Illegal Parking"
+                                    class="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-red-500">
+                                @error('jenis_pelanggaran')
+                                    <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            {{-- Desc --}}
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Description (optional)</label>
+                                <textarea name="deskripsi" rows="3"
+                                    class="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-red-500"></textarea>
+                                @error('deskripsi')
+                                    <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            {{-- Fine --}}
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Fine Amount (Rp)</label>
+                                <input name="denda" type="number" min="0" placeholder="50000"
+                                    class="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-red-500">
+                                @error('denda')
+                                    <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            {{-- Photo --}}
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Evidence (Photo)</label>
+                                <input name="foto" type="file" accept="image/*"
+                                    class="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-red-500 bg-white">
+                                <p class="text-xs text-gray-500 mt-1">jpg/png/webp max 3MB</p>
+                                @error('foto')
+                                    <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+
+                        {{-- footer --}}
+                        <div class="bg-gray-50 px-6 py-4 flex justify-end gap-3 border-t border-gray-200 shrink-0">
+                            <button type="button" onclick="closeModal()"
+                                class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 text-sm font-medium transition-colors">
+                                Cancel
+                            </button>
+                            <button type="submit"
+                                class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium shadow-sm transition-colors">
+                                Issue Fine
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <button type="button" onclick="closeModal()"
-                    class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-1.5 rounded-full transition-colors">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
             </div>
-
-            <form method="POST" action="{{ route('admin.violations.store') }}" enctype="multipart/form-data">
-                @csrf
-
-                <div class="p-6 space-y-4">
-                    {{-- Kendaraan dropdown --}}
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Select Vehicle (Plate)</label>
-
-                        <select name="kendaraan_id" id="kendaraanSelect" required
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-red-500 bg-white">
-                            <option value="">-- Choose plate --</option>
-
-                            @foreach ($kendaraans as $k)
-                                @php
-                                    $ownerName = $k->user?->nama ?? ($k->user?->name ?? ($k->user?->email ?? '-'));
-                                @endphp
-                                <option value="{{ $k->id }}"
-                                    data-plate="{{ strtoupper($k->plat_no) }}"
-                                    data-stnk="{{ $k->stnk_number ?? '-' }}"
-                                    data-owner="{{ $ownerName }}"
-                                    data-jenis="{{ $k->jenis_kendaraan ?? '-' }}">
-                                    {{ strtoupper($k->plat_no) }} — {{ $ownerName }}
-                                </option>
-                            @endforeach
-                        </select>
-
-                        <p class="text-xs text-gray-500 mt-1">
-                            Setelah pilih plate, STNK / Owner / Vehicle Type akan terisi otomatis.
-                        </p>
-
-                        @error('kendaraan_id')
-                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    {{-- Auto-fill preview --}}
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
-                            <div class="text-[11px] text-gray-500 uppercase">STNK</div>
-                            <div id="pvStnk" class="text-sm font-semibold text-gray-800">-</div>
-                        </div>
-                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
-                            <div class="text-[11px] text-gray-500 uppercase">Owner</div>
-                            <div id="pvOwner" class="text-sm font-semibold text-gray-800">-</div>
-                        </div>
-                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
-                            <div class="text-[11px] text-gray-500 uppercase">Vehicle Type</div>
-                            <div id="pvJenis" class="text-sm font-semibold text-gray-800">-</div>
-                        </div>
-                    </div>
-
-                    {{-- Violation type --}}
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Violation Type</label>
-                        <input name="jenis_pelanggaran" type="text" required placeholder="e.g. Illegal Parking"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-red-500">
-
-                        @error('jenis_pelanggaran')
-                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    {{-- Desc --}}
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Description (optional)</label>
-                        <textarea name="deskripsi" rows="3"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-red-500"></textarea>
-                        @error('deskripsi')
-                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    {{-- Fine --}}
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Fine Amount (Rp)</label>
-                        <input name="denda" type="number" min="0" placeholder="50000"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-red-500">
-                        @error('denda')
-                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    {{-- Photo --}}
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Evidence (Photo)</label>
-                        <input name="foto" type="file" accept="image/*"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-red-500 bg-white">
-                        <p class="text-xs text-gray-500 mt-1">jpg/png/webp max 3MB</p>
-                        @error('foto')
-                            <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="bg-gray-50 px-6 py-4 flex justify-end gap-3 border-t border-gray-200">
-                    <button type="button" onclick="closeModal()"
-                        class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 text-sm font-medium transition-colors">
-                        Cancel
-                    </button>
-                    <button type="submit"
-                        class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium shadow-sm transition-colors">
-                        Issue Fine
-                    </button>
-                </div>
-            </form>
         </div>
     </div>
 @endsection
 
 @push('scripts')
     <script>
+        const modalElId = 'violationModal';
+
         function openModal() {
-            document.getElementById('violationModal').classList.remove('hidden');
+            const el = document.getElementById(modalElId);
+            if (!el) return;
+            el.classList.remove('hidden');
+            document.body.classList.add('overflow-hidden'); // lock bg scroll
         }
 
         function closeModal() {
-            document.getElementById('violationModal').classList.add('hidden');
+            const el = document.getElementById(modalElId);
+            if (!el) return;
+            el.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
         }
 
+        // close when click backdrop (NOT when click inside modal)
+        function onBackdrop(e) {
+            const modal = document.getElementById(modalElId);
+            if (!modal) return;
+            if (e.target === e.currentTarget) closeModal();
+        }
+
+        // close with ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+        });
+
         // Autofill preview dari dropdown
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const select = document.getElementById('kendaraanSelect');
             const pvStnk = document.getElementById('pvStnk');
             const pvOwner = document.getElementById('pvOwner');
